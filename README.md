@@ -7,6 +7,8 @@ Stack used:
 * Scalelite for load balancing
 * Prometheus and Grafana (possibly) for monitoring
 
+Useful resource: the repo with privacy stuff
+
 Installation instructions below taken right from stadtulm:
 
 ### Prepare
