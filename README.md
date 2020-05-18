@@ -1,4 +1,13 @@
-# a13-ansible
+# Timeout by the SRCF
+
+Stack used:
+* Ansible for configuration management on servers
+* BBB for the core video-conferencing software
+* Greenlight for session management frontend
+* Scalelite for load balancing
+* Prometheus and Grafana (possibly) for monitoring
+
+Installation instructions below taken right from stadtulm:
 
 ### Prepare
 
