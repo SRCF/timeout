@@ -8,16 +8,16 @@
   user:
     name: greenlight
     shell: /bin/bash
-    password: '!'
+    password: "!"
     update_password: on_create
     groups: greenlight
     state: present
 
 - name: Checkout greenlight repository
   git:
-    repo: https://github.com/stadtulm/greenlight.git
+    repo: https://github.com/srcf/greenlight.git
     dest: /var/www/greenlight
-    version: ulmlernt
+    version: srcf
     #version: 5c54d2ee44b0a2ed23361bbf4fc94e16f6982720
   notify: restart greenlight
 

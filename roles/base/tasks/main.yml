@@ -2,21 +2,21 @@
 - name: Ensure wrong hostname is not in hosts file
   lineinfile:
     dest: /etc/hosts
-    regexp: '{{ ansible_hostname }}$'
+    regexp: "{{ ansible_hostname }}$"
     state: absent
     backup: yes
   when: ansible_hostname != inventory_hostname_short
 
 - name: Ensure Hostname
   hostname:
-    name: '{{ inventory_hostname_short }}'
+    name: "{{ inventory_hostname_short }}"
   when: ansible_hostname != inventory_hostname_short
 
 - name: Ensure Hostname in hosts file
   lineinfile:
     dest: /etc/hosts
-    regexp: '{{ inventory_hostname_short }}$'
-    line: '{{ ansible_default_ipv4.address }} {{ inventory_hostname }} {{ inventory_hostname_short }}'
+    regexp: "{{ inventory_hostname_short }}$"
+    line: "{{ ansible_default_ipv4.address }} {{ inventory_hostname }} {{ inventory_hostname_short }}"
     state: present
   when: ansible_default_ipv4.address is defined
 
@@ -42,7 +42,7 @@
 
 - name: Ensure clean motd
   file:
-    path: '/etc/update-motd.d/{{item}}'
+    path: "/etc/update-motd.d/{{item}}"
     # only removing executable rights would be cleaner, but they are gone now
     state: absent
   with_items:
@@ -63,7 +63,7 @@
       #!/bin/sh
       printf "\n"
       printf "This system is managed with ansible, see following repository for details\n"
-      printf "https://github.com/stadtulm/a13-ansible\n"
+      printf "https://github.com/srcf/timeout\n"
       printf "\n"
     mode: 0755
     dest: /etc/update-motd.d/11-help-text
@@ -71,7 +71,7 @@
 - name: Ensure that LANG from ssh clients is not used
   lineinfile:
     path: /etc/ssh/sshd_config
-    line: 'AcceptEnv LANG LC_*'
+    line: "AcceptEnv LANG LC_*"
     state: absent
   notify: restart sshd
 

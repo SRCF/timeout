@@ -24,23 +24,23 @@
   hosts: all
   become: yes
   vars:
-    _node_exporter_binary_install_dir: '/opt/node_exporter'
-    _node_exporter_system_group: 'prometheus'
-    _node_exporter_system_user: 'prometheus'
+    _node_exporter_binary_install_dir: "/opt/node_exporter"
+    _node_exporter_system_group: "prometheus"
+    _node_exporter_system_user: "prometheus"
   roles:
     - cloudalchemy.node-exporter
     - node-exporter-ufw
 
-- name: DNS Server
-  hosts: dns
-  become: yes
-  tags:
-    - dns
-  vars:
-    coredns_config_file: files/coredns/Corefile.j2
-  roles:
-    - cloudalchemy.coredns
-    - coredns-ufw
+# - name: DNS Server
+#   hosts: dns
+#   become: yes
+#   tags:
+#     - dns
+#   vars:
+#     coredns_config_file: files/coredns/Corefile.j2
+#   roles:
+#     - cloudalchemy.coredns
+#     - coredns-ufw
 
 - name: TURN Server
   hosts: turn
@@ -91,7 +91,7 @@
   roles:
     - nginx
     - n0emis.bigbluebutton
-    - bbb-ulmlernt
+    - bbb-srcf
 
 - name: Collect BBB secrets
   hosts: bbb
@@ -125,10 +125,22 @@
     ruby_download_url: https://cache.ruby-lang.org/pub/ruby/2.6/ruby-2.6.6.tar.gz
     ruby_install_bundler: yes
     postgresql_hba_entries:
-      - {type: local, database: all, user: postgres, auth_method: peer}
-      - {type: local, database: all, user: all, auth_method: peer}
-      - {type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: trust}
-      - {type: host, database: all, user: all, address: '::1/128', auth_method: trust}
+      - { type: local, database: all, user: postgres, auth_method: peer }
+      - { type: local, database: all, user: all, auth_method: peer }
+      - {
+          type: host,
+          database: all,
+          user: all,
+          address: "127.0.0.1/32",
+          auth_method: trust,
+        }
+      - {
+          type: host,
+          database: all,
+          user: all,
+          address: "::1/128",
+          auth_method: trust,
+        }
     postgresql_users:
       - name: scalelite
         state: present
@@ -196,10 +208,22 @@
     ruby_install_bundler: yes
     nodejs_version: "12.x"
     postgresql_hba_entries:
-      - {type: local, database: all, user: postgres, auth_method: peer}
-      - {type: local, database: all, user: all, auth_method: peer}
-      - {type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: trust}
-      - {type: host, database: all, user: all, address: '::1/128', auth_method: trust}
+      - { type: local, database: all, user: postgres, auth_method: peer }
+      - { type: local, database: all, user: all, auth_method: peer }
+      - {
+          type: host,
+          database: all,
+          user: all,
+          address: "127.0.0.1/32",
+          auth_method: trust,
+        }
+      - {
+          type: host,
+          database: all,
+          user: all,
+          address: "::1/128",
+          auth_method: trust,
+        }
     postgresql_users:
       - name: greenlight
         state: present
@@ -220,44 +244,6 @@
     - greenlight
     #- greenlight-docker
 
-
-
-- name: Frontend - Rocketchat
-  hosts: frontend
-  become: yes
-  vars_files:
-    - vars.yml
-  tags:
-    - frontend
-    - rocketchat
-  vars:
-    nginx_domain_name: "chat.ulmlernt.de"
-    nginx_redirect_alias: "chat.ulmlernt.org"
-  roles:
-    - nginx
-    - nginx-tls-add
-    - nginx-tls-redirect
-    - docker
-    - rocketchat
-
-
-- name: Frontend - Dokuwiki
-  hosts: frontend
-  become: yes
-  vars_files:
-    - vars.yml
-  tags:
-    - frontend
-    - dokuwiki
-  vars:
-    nginx_domain_name: "doku.ulmlernt.de"
-    nginx_root: "/var/www/dokuwiki"
-  roles:
-    - nginx
-    - nginx-tls-add
-    - dokuwiki
-
-
 - name: Monitoring
   hosts: loadbalancer
   become: yes
@@ -269,42 +255,40 @@
     nginx_domain_name: mon.ulmlernt.org
     prometheus_targets:
       node:
-      - targets:
-          "{{ groups['all'] | map('extract', hostvars, ['ansible_fqdn']) | map('regex_replace', '$', ':9100') | list }}"
+        - targets: "{{ groups['all'] | map('extract', hostvars, ['ansible_fqdn']) | map('regex_replace', '$', ':9100') | list }}"
       bbb:
-      - targets:
-          "{{ groups['bbb'] | map('extract', hostvars, ['ansible_fqdn']) | map('regex_replace', '$', ':9688') | list }}"
+        - targets: "{{ groups['bbb'] | map('extract', hostvars, ['ansible_fqdn']) | map('regex_replace', '$', ':9688') | list }}"
     prometheus_scrape_configs:
       - job_name: "prometheus"
         metrics_path: "/metrics"
         static_configs:
           - targets:
-            - "127.0.0.1:9090"
+              - "127.0.0.1:9090"
       - job_name: "coredns"
         metrics_path: "/metrics"
         static_configs:
           - targets:
-            - "{{ ansible_default_ipv4.address }}:9153"
+              - "{{ ansible_default_ipv4.address }}:9153"
       - job_name: "node"
         file_sd_configs:
           - files:
-            - "/etc/prometheus/file_sd/node.yml"
+              - "/etc/prometheus/file_sd/node.yml"
         relabel_configs:
-          - source_labels: ['__address__']
-            separator:     ':'
-            regex:         '(.*):.*'
-            target_label:  'instance'
-            replacement:   '$1'
+          - source_labels: ["__address__"]
+            separator: ":"
+            regex: "(.*):.*"
+            target_label: "instance"
+            replacement: "$1"
       - job_name: "bbb"
         file_sd_configs:
           - files:
-            - "/etc/prometheus/file_sd/bbb.yml"
+              - "/etc/prometheus/file_sd/bbb.yml"
         relabel_configs:
-          - source_labels: ['__address__']
-            separator:     ':'
-            regex:         '(.*):.*'
-            target_label:  'instance'
-            replacement:   '$1'
+          - source_labels: ["__address__"]
+            separator: ":"
+            regex: "(.*):.*"
+            target_label: "instance"
+            replacement: "$1"
     grafana_address: 127.0.0.1
     grafana_port: 3001
     grafana_url: "https://mon.ulmlernt.org"
@@ -319,7 +303,7 @@
       - name: prometheus
         type: prometheus
         access: proxy
-        url: 'http://localhost:9090'
+        url: "http://localhost:9090"
         basicAuth: false
         isDefault: true
     grafana_dashboards_dir: files/grafana/dashboards
@@ -357,83 +341,29 @@
 
 - name: Backup Server
   hosts: backupstorage
-  tags: 
+  tags:
     - backup
   become: yes
   vars:
     rest_backup_storage_dir: "/mnt/backup/restic"
     rest_backup_server: "bck.ulmlernt.org"
     rest_backup_tasks:
-      - { name: "dokuwiki", conn_pw: "{{ restic_backup_dokuwiki_conn_pw }}", backup_pw: "{{ restic_backup_dokuwiki_backup_pw }}" }
-      - { name: "greenlight" , conn_pw: "{{ restic_backup_greenlight_conn_pw }}", backup_pw: "{{ restic_backup_greenlight_backup_pw }}" }
-      - { name: "zammad" , conn_pw: "{{ restic_backup_zammad_conn_pw }}", backup_pw: "{{ restic_backup_zammad_backup_pw }}" }
+      - {
+          name: "dokuwiki",
+          conn_pw: "{{ restic_backup_dokuwiki_conn_pw }}",
+          backup_pw: "{{ restic_backup_dokuwiki_backup_pw }}",
+        }
+      - {
+          name: "greenlight",
+          conn_pw: "{{ restic_backup_greenlight_conn_pw }}",
+          backup_pw: "{{ restic_backup_greenlight_backup_pw }}",
+        }
+      - {
+          name: "zammad",
+          conn_pw: "{{ restic_backup_zammad_conn_pw }}",
+          backup_pw: "{{ restic_backup_zammad_backup_pw }}",
+        }
   vars_files:
     - vars.yml
   roles:
     - restic-server
-
-- name: Backup Client - Dokuwiki
-  hosts: frontend
-  become: yes
-  tags:
-    - backup 
-  vars_files:
-    - vars.yml
-  vars:
-    backup_name: "dokuwiki"
-    backup_server: "{{ restic_backup_server }}"
-    backup_conn_pw: "{{ restic_backup_dokuwiki_conn_pw }}"
-    backup_pw: "{{ restic_backup_dokuwiki_backup_pw }}"
-    backup_script: "backup_directory.sh"
-    backup_dir: "/var/www/dokuwiki"
-  roles:
-    - restic-client
-
-- name: Backup Client - Greenlight
-  hosts: frontend
-  become: yes
-  tags:
-    - backup 
-  vars_files:
-    - vars.yml
-  vars:
-    backup_name: "greenlight"
-    backup_server: "{{ restic_backup_server }}"
-    backup_conn_pw: "{{ restic_backup_greenlight_conn_pw }}"
-    backup_pw: "{{ restic_backup_greenlight_backup_pw }}"
-    backup_script: "backup_postgres.sh"
-    backup_pg_db: "greenlight_production"
-  roles:
-    - restic-client
-
-- name: Support Ticket System Zammad
-  hosts: support
-  become: yes
-  tags:
-    - support
-    - backup 
-  vars_files:
-    - vars.yml
-  vars:
-    nginx_domain_name: support.ulmlernt.de
-    nginx_redirect_alias: support.ulmlernt.org
-    elasticsearch_version: '7.x'
-    elasticsearch_extra_options: | 
-      http.max_content_length: 400mb
-      indices.query.bool.max_clause_count: 2000
-    backup_name: "zammad"
-    backup_server: "{{ restic_backup_server }}"
-    backup_conn_pw: "{{ restic_backup_zammad_conn_pw }}"
-    backup_pw: "{{ restic_backup_zammad_backup_pw }}"
-    backup_script: "backup_directory.sh"
-    backup_dir: "/var/tmp/zammad_backup"
-  roles:
-    - nginx
-    - nginx-tls
-    - nginx-tls-redirect
-    - geerlingguy.java
-    - geerlingguy.elasticsearch
-    - geerlingguy.mailhog
-    - zammad
-    - restic-client
-  
