@@ -31,15 +31,15 @@
 #     - cloudalchemy.node-exporter
 #     - node-exporter-ufw
 
-- name: TURN Server
-  hosts: turn
-  become: yes
-  tags:
-    - turn
-  vars_files:
-    - vars.yml
-  roles:
-    - turn-standalone
+# - name: TURN Server
+#   hosts: turn
+#   become: yes
+#   tags:
+#     - turn
+#   vars_files:
+#     - vars.yml
+#   roles:
+#     - turn-standalone
 
 - name: BigBlueButton
   hosts: bbb
@@ -53,10 +53,11 @@
     bbb_letsencrypt_email: "{{ letsencrypt_email }}"
     bbb_coturn_enable: yes
     bbb_turn_enable: yes
-    bbb_turn_server: "{{ ansible_fqdn }}"
+    bbb_nginx_dh: no
+#    bbb_turn_server: "{{ ansible_fqdn }}"
     bbb_greenlight_enable: no
     bbb_api_demos_enable: no
-    bbb_additional_turn_secret: "{{ turn_secret }}"
+#    bbb_additional_turn_secret: "{{ turn_secret }}"
   pre_tasks:
     - name: find out what the current turn config is
       slurp:

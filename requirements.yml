@@ -5,8 +5,8 @@ roles:
   # we're using our own DNS
   # - name: cloudalchemy.coredns
   #   version: 0.3.2
-  ## currently using our own fork
-  #  - name: n0emis.bigbluebutton
+  # currently not using the custom fork
+  - name: n0emis.bigbluebutton
   - name: geerlingguy.nodejs
     version: 5.1.1
   - name: geerlingguy.docker
