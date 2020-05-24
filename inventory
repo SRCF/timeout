@@ -7,11 +7,10 @@ ping.timeout.srcf.net
 tuit.timeout.srcf.net
 
 [loadbalancer]
-fsn01.ulmlernt.org nginx_domain_name="lb.ulmlernt.org"
+gateway.timeout.srcf.net nginx_domain_name="gateway.timeout.srcf.net"
 
 [monitoring]
-fsn01.ulmlernt.org
 
 [frontend]
-fsn03.ulmlernt.org
+gateway.timeout.srcf.net
 

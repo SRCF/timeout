@@ -34,7 +34,7 @@ greenlight_postgres_password: !vault |
   3463343736643265610a396164626464626365333366663531343761386538356232323461633133
   37666639306436626436386136646436343533363436373536623865326264306237
 
-scalelite_loadbalancer_url: "https://lb.timeout.srcf.net/bigbluebutton/"
+scalelite_loadbalancer_url: "https://gateway.timeout.srcf.net/bigbluebutton/"
 
 scalelite_loadbalancer_secret: !vault |
   $ANSIBLE_VAULT;1.1;AES256
