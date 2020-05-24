@@ -2,6 +2,8 @@
 
 https://github.com/stadtulm/greenlight/commits/ulmlernt
 
+TODO: ADD FAVICON /var/www/bigbluebutton-default/favicon.ico
+
 Stack used:
 * Ansible for configuration management on servers
 * BBB for the core video-conferencing software
