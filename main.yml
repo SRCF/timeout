@@ -51,7 +51,7 @@
   vars:
     bbb_letsencrypt_enable: yes
     bbb_letsencrypt_email: "{{ letsencrypt_email }}"
-    bbb_coturn_enable: yes
+    bbb_coturn_enable: no
     bbb_turn_enable: yes
     bbb_nginx_dh: no
 #    bbb_turn_server: "{{ ansible_fqdn }}"
