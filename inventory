@@ -18,6 +18,3 @@ fsn01.ulmlernt.org
 [frontend]
 fsn03.ulmlernt.org
 
-[turn]
-nbg03.ulmlernt.org turn_hostname="turn01.ulmlernt.org"
-fsn10.ulmlernt.org turn_hostname="turn02.ulmlernt.org"

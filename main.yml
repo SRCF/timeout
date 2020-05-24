@@ -187,7 +187,7 @@
     - greenlight
   vars:
     nginx_domain_name: "timeout.srcf.net"
-    nginx_redirect_alias: "gl.timeout.srcf.net"
+    nginx_redirect_alias: "gateway.timeout.srcf.net"
     lb_url: "{{ scalelite_loadbalancer_url }}"
     lb_secret: "{{ scalelite_loadbalancer_secret }}"
     redis_port: 6379
