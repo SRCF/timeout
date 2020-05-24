@@ -1,9 +1,4 @@
 ---
-users:
-  - { name: "mw781", sshkeys: "https://github.com/matiasilva.keys" }
-  - { name: "mas90", sshkeys: "https://github.com/mas90.keys" }
-  - { name: "eb677", sshkeys: "https://github.com/edwinbalani.keys" }
-
 letsencrypt_email: support@srcf.net
 
 mail_admin:

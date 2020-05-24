@@ -9,16 +9,16 @@
   roles:
     - base
 
-- name: Base User setup/update
-  hosts: all
-  become: yes
-  tags:
-    - base
-    - user
-  vars_files:
-    - vars.yml
-  roles:
-    - base-user
+# - name: Base User setup/update
+#   hosts: all
+#   become: yes
+#   tags:
+#     - base
+#     - user
+#   vars_files:
+#     - vars.yml
+#   roles:
+#     - base-user
 
 # - name: Monitored host
 #   hosts: all
