@@ -21,12 +21,24 @@
   notify: restart bigbluebutton
 
 # TODO
-# - name: customize welcome meeting message
-#   lineinfile:
-#     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-#     regexp: "^defaultWelcomeMessage"
-#     line: "defaultWelcomeMessage=false"
-#   notify: restart bigbluebutton
+- name: customize welcome meeting header
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: "^defaultWelcomeMessage"
+    line: "defaultWelcomeMessage=Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href=\"event:http://www.bigbluebutton.org/html5\"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button. Use a headset to avoid causing background noise for others."
+  notify: restart bigbluebutton
+
+- name: customize welcome meeting footer
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: "^defaultWelcomeMessageFooter"
+    line: "defaultWelcomeMessageFooter=Please report all queries and issues to support@srcf.net"
+  notify: restart bigbluebutton
+
+- name: ensure that our favicon is used
+  copy:
+    src: favicon.ico
+    dest: /var/www/bigbluebutton-default/favicon.ico
 
 - name: ensure http call to root is redirected
   copy:

@@ -20,27 +20,16 @@
   roles:
     - base-user
 
-- name: Monitored host
-  hosts: all
-  become: yes
-  vars:
-    _node_exporter_binary_install_dir: "/opt/node_exporter"
-    _node_exporter_system_group: "prometheus"
-    _node_exporter_system_user: "prometheus"
-  roles:
-    - cloudalchemy.node-exporter
-    - node-exporter-ufw
-
-# - name: DNS Server
-#   hosts: dns
+# - name: Monitored host
+#   hosts: all
 #   become: yes
-#   tags:
-#     - dns
 #   vars:
-#     coredns_config_file: files/coredns/Corefile.j2
+#     _node_exporter_binary_install_dir: "/opt/node_exporter"
+#     _node_exporter_system_group: "prometheus"
+#     _node_exporter_system_user: "prometheus"
 #   roles:
-#     - cloudalchemy.coredns
-#     - coredns-ufw
+#     - cloudalchemy.node-exporter
+#     - node-exporter-ufw
 
 - name: TURN Server
   hosts: turn
@@ -102,13 +91,13 @@
   roles:
     - bbb-collect
 
-- name: BBB Exporter
-  hosts: bbb
-  become: yes
-  tags:
-    - bbb
-  roles:
-    - bbb-exporter
+# - name: BBB Exporter
+#   hosts: bbb
+#   become: yes
+#   tags:
+#     - bbb
+#   roles:
+#     - bbb-exporter
 
 - name: Loadbalancer
   hosts: loadbalancer
@@ -171,21 +160,21 @@
   roles:
     - scalelite-config
 
-- name: Easy Join
-  hosts: loadbalancer
-  become: yes
-  vars_files:
-    - vars.yml
-  vars:
-    nodejs_version: "12.x"
-    bbb_secret: "{{ scalelite_loadbalancer_secret }}"
-  tags:
-    - loadbalancer
-  roles:
-    - nginx
-    - nginx-tls
-    - geerlingguy.nodejs
-    - bbb-easy-join
+# - name: Easy Join
+#   hosts: loadbalancer
+#   become: yes
+#   vars_files:
+#     - vars.yml
+#   vars:
+#     nodejs_version: "12.x"
+#     bbb_secret: "{{ scalelite_loadbalancer_secret }}"
+#   tags:
+#     - loadbalancer
+#   roles:
+#     - nginx
+#     - nginx-tls
+#     - geerlingguy.nodejs
+#     - bbb-easy-join
 
 - name: Frontend - Greenlight
   hosts: frontend
@@ -196,8 +185,8 @@
     - frontend
     - greenlight
   vars:
-    nginx_domain_name: "ulmlernt.de"
-    nginx_redirect_alias: "gl.ulmlernt.org"
+    nginx_domain_name: "timeout.srcf.net"
+    nginx_redirect_alias: "gl.timeout.srcf.net"
     lb_url: "{{ scalelite_loadbalancer_url }}"
     lb_secret: "{{ scalelite_loadbalancer_secret }}"
     redis_port: 6379
@@ -244,126 +233,97 @@
     - greenlight
     #- greenlight-docker
 
-- name: Monitoring
-  hosts: loadbalancer
-  become: yes
-  tags:
-    - monitoring
-  vars_files:
-    - vars.yml
-  vars:
-    nginx_domain_name: mon.ulmlernt.org
-    prometheus_targets:
-      node:
-        - targets: "{{ groups['all'] | map('extract', hostvars, ['ansible_fqdn']) | map('regex_replace', '$', ':9100') | list }}"
-      bbb:
-        - targets: "{{ groups['bbb'] | map('extract', hostvars, ['ansible_fqdn']) | map('regex_replace', '$', ':9688') | list }}"
-    prometheus_scrape_configs:
-      - job_name: "prometheus"
-        metrics_path: "/metrics"
-        static_configs:
-          - targets:
-              - "127.0.0.1:9090"
-      - job_name: "coredns"
-        metrics_path: "/metrics"
-        static_configs:
-          - targets:
-              - "{{ ansible_default_ipv4.address }}:9153"
-      - job_name: "node"
-        file_sd_configs:
-          - files:
-              - "/etc/prometheus/file_sd/node.yml"
-        relabel_configs:
-          - source_labels: ["__address__"]
-            separator: ":"
-            regex: "(.*):.*"
-            target_label: "instance"
-            replacement: "$1"
-      - job_name: "bbb"
-        file_sd_configs:
-          - files:
-              - "/etc/prometheus/file_sd/bbb.yml"
-        relabel_configs:
-          - source_labels: ["__address__"]
-            separator: ":"
-            regex: "(.*):.*"
-            target_label: "instance"
-            replacement: "$1"
-    grafana_address: 127.0.0.1
-    grafana_port: 3001
-    grafana_url: "https://mon.ulmlernt.org"
-    grafana_domain: "mon.ulmlernt.org"
-    grafana_database:
-      type: postgres
-      host: 127.0.0.1:5432
-      name: grafana
-      user: grafana
-      password: trust
-    grafana_datasources:
-      - name: prometheus
-        type: prometheus
-        access: proxy
-        url: "http://localhost:9090"
-        basicAuth: false
-        isDefault: true
-    grafana_dashboards_dir: files/grafana/dashboards
-    grafana_security:
-      admin_user: admin
-      admin_password: "{{ monitoring_grafana_admin_password }}"
-    grafana_users:
-      allow_sign_up: false
-      default_theme: dark
-      auto_assign_org: true
-      editors_can_admin: true
-      auto_assign_org_role: Editor
-    grafana_auth:
-      disable_login_form: true
-      anonymous:
-        enabled: true
-        org_name: ulmlernt
-        org_role: Viewer
-      github:
-        enabled: true
-        allow_sign_up: true
-        client_id: "{{ monitoring_github_client_id }}"
-        client_secret: "{{ monitoring_github_client_secret }}"
-        scopes: user:email,read:org
-        auth_url: https://github.com/login/oauth/authorize
-        token_url: https://github.com/login/oauth/access_token
-        api_url: https://api.github.com/user
-        team_ids: ""
-        allowed_organizations: stadtulm
-  roles:
-    - cloudalchemy.prometheus
-    - prometheus-ufw
-    - cloudalchemy.grafana
-    - nginx-tls-monitoring
-
-- name: Backup Server
-  hosts: backupstorage
-  tags:
-    - backup
-  become: yes
-  vars:
-    rest_backup_storage_dir: "/mnt/backup/restic"
-    rest_backup_server: "bck.ulmlernt.org"
-    rest_backup_tasks:
-      - {
-          name: "dokuwiki",
-          conn_pw: "{{ restic_backup_dokuwiki_conn_pw }}",
-          backup_pw: "{{ restic_backup_dokuwiki_backup_pw }}",
-        }
-      - {
-          name: "greenlight",
-          conn_pw: "{{ restic_backup_greenlight_conn_pw }}",
-          backup_pw: "{{ restic_backup_greenlight_backup_pw }}",
-        }
-      - {
-          name: "zammad",
-          conn_pw: "{{ restic_backup_zammad_conn_pw }}",
-          backup_pw: "{{ restic_backup_zammad_backup_pw }}",
-        }
-  vars_files:
-    - vars.yml
-  roles:
-    - restic-server
+# - name: Monitoring
+#   hosts: loadbalancer
+#   become: yes
+#   tags:
+#     - monitoring
+#   vars_files:
+#     - vars.yml
+#   vars:
+#     nginx_domain_name: mon.ulmlernt.org
+#     prometheus_targets:
+#       node:
+#         - targets: "{{ groups['all'] | map('extract', hostvars, ['ansible_fqdn']) | map('regex_replace', '$', ':9100') | list }}"
+#       bbb:
+#         - targets: "{{ groups['bbb'] | map('extract', hostvars, ['ansible_fqdn']) | map('regex_replace', '$', ':9688') | list }}"
+#     prometheus_scrape_configs:
+#       - job_name: "prometheus"
+#         metrics_path: "/metrics"
+#         static_configs:
+#           - targets:
+#               - "127.0.0.1:9090"
+#       - job_name: "coredns"
+#         metrics_path: "/metrics"
+#         static_configs:
+#           - targets:
+#               - "{{ ansible_default_ipv4.address }}:9153"
+#       - job_name: "node"
+#         file_sd_configs:
+#           - files:
+#               - "/etc/prometheus/file_sd/node.yml"
+#         relabel_configs:
+#           - source_labels: ["__address__"]
+#             separator: ":"
+#             regex: "(.*):.*"
+#             target_label: "instance"
+#             replacement: "$1"
+#       - job_name: "bbb"
+#         file_sd_configs:
+#           - files:
+#               - "/etc/prometheus/file_sd/bbb.yml"
+#         relabel_configs:
+#           - source_labels: ["__address__"]
+#             separator: ":"
+#             regex: "(.*):.*"
+#             target_label: "instance"
+#             replacement: "$1"
+#     grafana_address: 127.0.0.1
+#     grafana_port: 3001
+#     grafana_url: "https://mon.ulmlernt.org"
+#     grafana_domain: "mon.ulmlernt.org"
+#     grafana_database:
+#       type: postgres
+#       host: 127.0.0.1:5432
+#       name: grafana
+#       user: grafana
+#       password: trust
+#     grafana_datasources:
+#       - name: prometheus
+#         type: prometheus
+#         access: proxy
+#         url: "http://localhost:9090"
+#         basicAuth: false
+#         isDefault: true
+#     grafana_dashboards_dir: files/grafana/dashboards
+#     grafana_security:
+#       admin_user: admin
+#       admin_password: "{{ monitoring_grafana_admin_password }}"
+#     grafana_users:
+#       allow_sign_up: false
+#       default_theme: dark
+#       auto_assign_org: true
+#       editors_can_admin: true
+#       auto_assign_org_role: Editor
+#     grafana_auth:
+#       disable_login_form: true
+#       anonymous:
+#         enabled: true
+#         org_name: ulmlernt
+#         org_role: Viewer
+#       github:
+#         enabled: true
+#         allow_sign_up: true
+#         client_id: "{{ monitoring_github_client_id }}"
+#         client_secret: "{{ monitoring_github_client_secret }}"
+#         scopes: user:email,read:org
+#         auth_url: https://github.com/login/oauth/authorize
+#         token_url: https://github.com/login/oauth/access_token
+#         api_url: https://api.github.com/user
+#         team_ids: ""
+#         allowed_organizations: stadtulm
+#   roles:
+#     - cloudalchemy.prometheus
+#     - prometheus-ufw
+#     - cloudalchemy.grafana
+#     - nginx-tls-monitoring
