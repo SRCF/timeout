@@ -1,4 +1,6 @@
 ---
+- import_tasks: nginx-config.yml
+
 - name: Ensure group "greenlight" exists
   group:
     name: greenlight
@@ -108,9 +110,3 @@
   systemd:
     name: greenlight
     state: started
-
-- name: Ensure greenlight nginx config exists
-  template:
-    src: nginx-greenlight.conf.j2
-    dest: /etc/nginx/a13.d/greenlight.conf
-  notify: reload nginx
