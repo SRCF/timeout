@@ -29,10 +29,10 @@
       - docker-compose
     state: present
 
-- name: Ensure Users are in Docker group
-  user:
-    name: '{{ item.name }}'
-    groups: docker
-    append: yes
-    state: present
-  with_items: '{{ users }}'
+# - name: Ensure Users are in Docker group
+#   user:
+#     name: '{{ item.name }}'
+#     groups: docker
+#     append: yes
+#     state: present
+#   with_items: '{{ users }}'
