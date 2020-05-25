@@ -1,8 +1,8 @@
 ---
 - name: Build a list of bbb instances with their secrets
- debug:
-   msg: "{{ hostvars[item]['bbb_url'] }} : {{ hostvars[item]['bbb_secret'] }}"
- with_items: "{{ groups['bbb'] }}"
+  debug:
+    msg: "{{ hostvars[item]['bbb_url'] }} : {{ hostvars[item]['bbb_secret'] }}"
+  with_items: "{{ groups['bbb'] }}"
 
 - name: Ensure all servers are registered at the loadbalancer
   shell:
