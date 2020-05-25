@@ -1,8 +1,6 @@
-server_tokens off;
-
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+    listen 80;
+    listen [::]:80;
     server_name {{ nginx_domain_name }};
 
     location /.well-known/acme-challenge {
