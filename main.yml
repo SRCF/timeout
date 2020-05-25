@@ -109,7 +109,7 @@
   vars_files:
     - vars.yml
   vars:
-    nginx_domain_name: gateway.timeout.srcf.net
+    nginx_domain_name: "lb.gateway.timeout.srcf.net"
     redis_port: 6379
     redis_bind_interface: 127.0.0.1
     ruby_install_from_source: yes
@@ -189,7 +189,7 @@
     - greenlight
   vars:
     nginx_domain_name: "timeout.srcf.net"
-    nginx_redirect_alias: "gateway.timeout.srcf.net"
+    nginx_redirect_alias: "gl.gateway.timeout.srcf.net"
     lb_url: "{{ scalelite_loadbalancer_url }}"
     lb_secret: "{{ scalelite_loadbalancer_secret }}"
     redis_port: 6379
