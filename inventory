@@ -1,13 +1,14 @@
 [all]
 ping.timeout.srcf.net
 tuit.timeout.srcf.net
+gateway.timeout.srcf.net
 
 [bbb]
 ping.timeout.srcf.net
 tuit.timeout.srcf.net
 
 [loadbalancer]
-gateway.timeout.srcf.net nginx_domain_name="gateway.timeout.srcf.net"
+gateway.timeout.srcf.net
 
 [monitoring]
 
