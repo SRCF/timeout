@@ -149,8 +149,8 @@
     - nginx
     - nginx-tls
 #    - geerlingguy.redis
-#    - role: geerlingguy.postgresql
-#      become: yes
+    - role: geerlingguy.postgresql
+      become: yes
 #    - geerlingguy.ruby
     - scalelite
 
