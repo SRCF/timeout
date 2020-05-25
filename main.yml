@@ -109,6 +109,7 @@
   vars_files:
     - vars.yml
   vars:
+    nginx_domain_name: gateway.timeout.srcf.net
     redis_port: 6379
     redis_bind_interface: 127.0.0.1
     ruby_install_from_source: yes
