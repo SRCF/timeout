@@ -1,8 +1,8 @@
 ---
-- name: Add certbot apt repo
-  apt_repository:
-    repo: ppa:certbot/certbot
-    state: present
+# - name: Add certbot apt repo
+#   apt_repository:
+#     repo: ppa:certbot/certbot
+#     state: present
 
 - name: Install certbot
   apt:

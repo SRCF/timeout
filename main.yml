@@ -148,10 +148,10 @@
   roles:
     - nginx
     - nginx-tls
-    - geerlingguy.redis
-    - role: geerlingguy.postgresql
-      become: yes
-    - geerlingguy.ruby
+#    - geerlingguy.redis
+#    - role: geerlingguy.postgresql
+#      become: yes
+#    - geerlingguy.ruby
     - scalelite
 
 - name: Register BBBs at Loadbalancer
