@@ -43,22 +43,24 @@
 
 # bundler: deployment mode by cli argument is deprecated, so we're going to run this:
 - name: Ensure bundle in is deployment mode
+  become: yes
+  become_user: greenlight
   command:
     cmd: bundle config set deployment 'true'
     chdir: /var/www/greenlight
     creates: /var/www/greenlight/.bundle/config
-  become: yes
-  become_user: greenlight
+#  
 
 - name: Ensure gems for greenlight are installed
+  become: yes
+  become_user: greenlight
   bundler:
     state: present
     exclude_groups:
       - development
       - test
     chdir: /var/www/greenlight
-  become: yes
-  become_user: greenlight
+#  
 
 - name: find out what the current greenlight env is
   slurp:
@@ -84,11 +86,12 @@
   when: not greenlight_key_base is defined
 
 - name: Ensure environment file for greenlight
+  become: yes
+  become_user: greenlight
   template:
     src: env.j2
     dest: /var/www/greenlight/.env
-  become: yes
-  become_user: greenlight
+#  
 
 - name: Ensure systemd unit for greenlight
   template:
