@@ -24,6 +24,13 @@
     policy: deny
     state: enabled
 
+- name: Allow everything on SRCF secure interface
+  ufw:
+    direction: incoming
+    policy: allow
+    interface: eth1
+    state: enabled
+
 - name: ensure fail2ban uses ufw
   copy:
     content: |
