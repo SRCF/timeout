@@ -26,10 +26,9 @@
 
 - name: Allow everything on SRCF secure interface
   ufw:
+    rule: allow
     direction: incoming
-    policy: allow
     interface: eth1
-    state: enabled
 
 - name: ensure fail2ban uses ufw
   copy:
