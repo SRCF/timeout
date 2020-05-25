@@ -1,0 +1,10 @@
+---
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded
+
+- name: restart scalelite
+  service:
+    name: scalelite.target
+    state: restarted

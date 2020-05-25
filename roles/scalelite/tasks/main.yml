@@ -90,6 +90,7 @@
     src: env.j2
     dest: /var/www/scalelite/.env
   become: yes
+  notify: restart scalelite
 #  become_user: scalelite
 
 - name: Ensure systemd unit for scalelite api

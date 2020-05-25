@@ -2,9 +2,6 @@
 roles:
   - name: cloudalchemy.node-exporter
     version: 0.19.0
-  # we're using our own DNS
-  # - name: cloudalchemy.coredns
-  #   version: 0.3.2
   # currently not using the custom fork
   - name: n0emis.bigbluebutton
   - name: geerlingguy.nodejs
