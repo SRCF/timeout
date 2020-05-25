@@ -11,6 +11,7 @@ tuit.timeout.srcf.net
 gateway.timeout.srcf.net
 
 [monitoring]
+gateway.timeout.srcf.net
 
 [frontend]
 gateway.timeout.srcf.net
