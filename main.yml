@@ -54,7 +54,7 @@
     bbb_coturn_enable: yes
     bbb_turn_enable: yes
     bbb_nginx_dh: no
-    bbb_coturn_secret: "{{ coturn_secret }}"
+    bbb_coturn_secret: "{{ turn_secret }}"
 #    bbb_turn_server: "{{ ansible_fqdn }}"
     bbb_greenlight_enable: no
     bbb_api_demos_enable: no
