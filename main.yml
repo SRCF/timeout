@@ -45,6 +45,10 @@
     bbb_coturn_secret: "{{ turn_secret }}"
     bbb_greenlight_enable: no
     bbb_api_demos_enable: no
+  pre_tasks:
+    - name: Ensure that pyaml is installed
+      pip:
+        name: pyaml
   roles:
     - nginx
     - n0emis.bigbluebutton
