@@ -1,0 +1,6 @@
+---
+
+- name: Copy maintenance files
+  copy:
+    src: "terms.md"
+    dest: "/var/www/greenlight/config/terms.md"

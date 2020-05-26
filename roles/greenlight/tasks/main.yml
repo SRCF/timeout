@@ -110,3 +110,6 @@
   systemd:
     name: greenlight
     state: started
+
+- name: Apply our custom configs
+  import_tasks: srcf-gl.yml

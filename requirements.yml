@@ -2,6 +2,7 @@
 roles:
   - name: cloudalchemy.node-exporter
     version: 0.19.0
+  - name: kwoodson.yedit
   # currently not using the custom fork
   - name: n0emis.bigbluebutton
   - name: geerlingguy.nodejs

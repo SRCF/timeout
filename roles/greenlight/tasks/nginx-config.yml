@@ -13,7 +13,7 @@
   file:
     path: /var/www/html/maintenance
     state: directory
-
+    
 - name: Copy maintenance files
   copy:
     src: "{{item}}"

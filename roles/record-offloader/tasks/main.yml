@@ -1,0 +1,6 @@
+---
+# https://github.com/bigbluebutton/bigbluebutton/pull/8394
+
+# to add to prometheus: https://github.com/povilasv/systemd_exporter
+
+# to have multiple workers: https://github.com/bigbluebutton/bigbluebutton/issues/8770

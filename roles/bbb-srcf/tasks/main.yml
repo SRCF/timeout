@@ -1,4 +1,12 @@
 ---
+- name: ensure we're using mp4 for recordings
+  yedit:
+    src: /usr/local/bigbluebutton/core/scripts/presentation.yml
+    key: video_formats
+    value:
+      - mp4
+  notify: restart bigbluebutton
+
 - name: ensure default recording is enabled
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
@@ -20,12 +28,18 @@
     line: "allowStartStopRecording=true"
   notify: restart bigbluebutton
 
-# TODO
 - name: customize welcome meeting header
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: "^defaultWelcomeMessage"
     line: "defaultWelcomeMessage=Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href=\"event:http://www.bigbluebutton.org/html5\"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button. Use a headset to avoid causing background noise for others."
+  notify: restart bigbluebutton
+
+- name: ensure our own help URL is used
+  yedit:
+    src: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
+    key: public.app.helpLink
+    value: "https://docs.srcf.net/timeout"
   notify: restart bigbluebutton
 
 - name: customize welcome meeting footer
@@ -118,3 +132,10 @@
     hour: "4"
     user: root
     job: "systemctl restart coturn.service"
+
+- name: Ensure that recording processing is disabled
+  systemd:
+    name: bbb-record-core.timer
+    enabled: no
+    masked: yes
+    state: stopped

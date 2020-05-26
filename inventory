@@ -2,6 +2,7 @@
 ping.timeout.srcf.net
 tuit.timeout.srcf.net
 gateway.timeout.srcf.net
+latency.srcf.net
 
 [bbb]
 ping.timeout.srcf.net
@@ -15,4 +16,7 @@ gateway.timeout.srcf.net
 
 [frontend]
 gateway.timeout.srcf.net
+
+[offloader]
+latency.srcf.net
 

@@ -48,6 +48,7 @@
   roles:
     - nginx
     - n0emis.bigbluebutton
+    - kwoodson.yedit
     - bbb-srcf
 
 - name: Collect BBB secrets
@@ -130,6 +131,24 @@
     - config
   roles:
     - scalelite-config
+
+- name: Recording offloader
+  hosts: offloader
+  become: yes
+  tags:
+    - offloader
+  vars:
+    bbb_nginx_dh: no
+    bbb_letsencrypt_enable: no
+    bbb_coturn_enable: no
+    bbb_turn_enable: no
+    bbb_greenlight_enable: no
+    bbb_api_demos_enable: no
+  roles:
+    - nginx
+    - n0emis.bigbluebutton
+    - bbb-srcf
+    - record-offloader
 
 # - name: Easy Join
 #   hosts: loadbalancer
@@ -285,7 +304,7 @@
         token_url: https://github.com/login/oauth/access_token
         api_url: https://api.github.com/user
         team_ids: ""
-        allowed_organizations: srcf
+        allowed_organizations: SRCF
   roles:
     - cloudalchemy.prometheus
     - prometheus-ufw
