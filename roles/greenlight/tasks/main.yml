@@ -93,6 +93,7 @@
   template:
     src: env.j2
     dest: /var/www/greenlight/.env
+  notify: restart greenlight
 #  
 
 - name: Ensure systemd unit for greenlight

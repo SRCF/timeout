@@ -1,6 +1,7 @@
 ---
 
-- name: Copy maintenance files
+- name: Copy our terms
   copy:
     src: "terms.md"
     dest: "/var/www/greenlight/config/terms.md"
+  notify: restart greenlight
