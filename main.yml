@@ -6,6 +6,10 @@
     - base
   vars_files:
     - vars.yml
+  pre_tasks:
+    - name: Ensure that pyaml is installed
+      pip:
+        name: pyaml
   roles:
     - base
 
@@ -14,13 +18,6 @@
   become: yes
   tags:
     - monitoring
-  pre_tasks:
-    - name: ensure that unzip is installed
-      apt:
-        name:
-          - unzip
-          - tar
-        state: present
   vars:
     _node_exporter_binary_install_dir: "/opt/node_exporter"
     _node_exporter_system_group: "prometheus"
@@ -45,10 +42,6 @@
     bbb_coturn_secret: "{{ turn_secret }}"
     bbb_greenlight_enable: no
     bbb_api_demos_enable: no
-  pre_tasks:
-    - name: Ensure that pyaml is installed
-      pip:
-        name: pyaml
   roles:
     - nginx
     - n0emis.bigbluebutton
@@ -151,6 +144,7 @@
   roles:
     - nginx
     - n0emis.bigbluebutton
+    - kwoodson.yedit
     - bbb-srcf
     - record-offloader
 
