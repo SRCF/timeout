@@ -4,3 +4,18 @@
 # to add to prometheus: https://github.com/povilasv/systemd_exporter
 
 # to have multiple workers: https://github.com/bigbluebutton/bigbluebutton/issues/8770
+
+- name: ensure we're using mp4 for recordings
+  yedit:
+    src: /usr/local/bigbluebutton/core/scripts/presentation.yml
+    key: video_formats
+    value:
+      - mp4
+  notify: restart bigbluebutton
+
+- name: Ensure that nginx is disabled
+  systemd:
+    name: nginx
+    enabled: no
+    masked: yes
+    state: stopped
