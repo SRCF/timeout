@@ -13,7 +13,7 @@
   hosts: all
   become: yes
   tags:
-    - monitoring
+    - monitoring-base
   vars:
     _node_exporter_binary_install_dir: "/opt/node_exporter"
     _node_exporter_system_group: "prometheus"
@@ -26,7 +26,7 @@
   hosts: bbb
   become: yes
   tags:
-    - bbb
+    - install-bbb
   vars_files:
     - vars.yml
   vars:
@@ -48,7 +48,7 @@
   hosts: bbb
   become: yes
   tags:
-    - bbb
+    - install-bbb
     - config
   roles:
     - bbb-collect
@@ -57,8 +57,7 @@
   hosts: bbb
   become: yes
   tags:
-    - bbb
-    - monitoring
+    - export-bbb
   roles:
     - bbb-exporter
 
@@ -67,7 +66,6 @@
   become: yes
   tags:
     - loadbalancer
-    - frontend
   vars_files:
     - vars.yml
   vars:
@@ -121,7 +119,6 @@
   become: yes
   tags:
     - loadbalancer
-    - config
   roles:
     - scalelite-config
 
@@ -166,7 +163,6 @@
   vars_files:
     - vars.yml
   tags:
-    - frontend
     - greenlight
   vars:
     nginx_domain_name: "timeout.srcf.net"
@@ -219,7 +215,7 @@
   hosts: loadbalancer
   become: yes
   tags:
-    - monitoring
+    - monitoring-config
   vars_files:
     - vars.yml
   vars:
