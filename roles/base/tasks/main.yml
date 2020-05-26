@@ -38,7 +38,12 @@
       - sudo
       - htop
       - vim
+      - python3-pip
     state: present
+
+- name: Ensure that pyaml is installed
+  pip:
+    name: pyaml
 
 - name: Ensure clean motd
   file:

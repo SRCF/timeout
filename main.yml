@@ -6,10 +6,6 @@
     - base
   vars_files:
     - vars.yml
-  pre_tasks:
-    - name: Ensure that pyaml is installed
-      pip:
-        name: pyaml
   roles:
     - base
 
