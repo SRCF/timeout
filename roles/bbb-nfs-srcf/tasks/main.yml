@@ -190,6 +190,48 @@
     opts: "soft,intr,nodev,nosuid,noexec"
     state: mounted
 
+- name: make local status directories for recording pre-processing
+  when: nfs_bbb|bool and nfs_active_meetings|bool
+  file:
+    path: "/var/local/bigbluebutton/recording/status/{{ item }}"
+    state: directory
+    owner: bigbluebutton
+    group: bigbluebutton
+  with_items:
+    - ended
+    - recorded
+    - archived
+
+- name: check status directories for recording pre-processing
+  when: nfs_bbb|bool and nfs_active_meetings|bool
+  run_once: true
+  stat:
+    path: "/var/bigbluebutton/recording/status/{{ item }}"
+  with_items:
+    - ended
+    - recorded
+    - archived
+  register: recording_status_stat
+
+- name: remove shared status directories for recording pre-processing
+  when: nfs_bbb|bool and nfs_active_meetings|bool and item.stat.isdir
+  run_once: true
+  file:
+    path: "/var/bigbluebutton/recording/status/{{ item.item }}"
+    state: absent
+    backup: yes
+  loop: "{{ recording_status_stat.results }}"
+
+- name: symlink local status directories for recording pre-processing
+  when: nfs_bbb|bool and nfs_active_meetings|bool and item.stat.isdir
+  run_once: true
+  file:
+    path: "/var/bigbluebutton/recording/status/{{ item.item }}"
+    state: link
+    src: "/var/local/bigbluebutton/recording/status/{{ item.item }}"
+    backup: yes
+  loop: "{{ recording_status_stat.results }}"
+
 - name: mount NFS for Scalelite recordings
   when: nfs_scalelite|bool
   mount:
