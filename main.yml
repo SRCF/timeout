@@ -142,11 +142,7 @@
     nfs_bbb: yes
     nfs_scalelite: yes
   roles:
-<<<<<<< HEAD
-=======
     - bbb-nfs-srcf
-    - nginx
->>>>>>> c028c2b73bc1d7ff00bd2aea0ce83af7d829f837
     - n0emis.bigbluebutton
     - kwoodson.yedit
     - record-offloader
