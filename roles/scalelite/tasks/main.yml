@@ -4,6 +4,41 @@
 
 - import_tasks: nginx-config.yml
 
+- name: Ensure that BBB apt key is present
+  apt_key:
+    url: "https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc"
+    state: present
+
+- name: Add BBB apt repository
+  apt_repository:
+    repo: "deb http://ubuntu.bigbluebutton.org/xenial-220/ bigbluebutton-xenial main"
+    filename: bigbluebutton
+    state: present
+
+- name: Ensure that yq apt key is present
+  apt_key:
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9a2d61f6bb03ced7522b8e7d6657dbe0cc86bb64"
+    state: present
+
+- name: Add yq apt repository
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/rmescandon/yq/ubuntu {{ ansible_distribution_release }} main"
+    filename: yq
+    state: present
+
+- name: Make /var/freeswitch/meetings because BBB packages assume it exists, sigh
+  file:
+    path: /var/freeswitch/meetings
+    state: directory
+
+- name: Download BBB playback components
+  apt:
+    pkg:
+      - bbb-playback-notes
+      - bbb-playback-podcast
+      - bbb-playback-presentation
+      - bbb-playback-screenshare
+
 - name: Checkout scalelite repository
   git:
     repo: https://github.com/blindsidenetworks/scalelite.git
