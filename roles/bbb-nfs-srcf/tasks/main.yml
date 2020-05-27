@@ -191,7 +191,7 @@
     state: mounted
 
 - name: make local status directories for recording pre-processing
-  when: nfs_bbb|bool and nfs_active_meetings|bool
+  when: nfs_bbb|bool
   file:
     path: "/var/local/bigbluebutton/recording/status/{{ item }}"
     state: directory
@@ -203,7 +203,7 @@
     - archived
 
 - name: check status directories for recording pre-processing
-  when: nfs_bbb|bool and nfs_active_meetings|bool
+  when: nfs_bbb|bool
   run_once: true
   stat:
     path: "/var/bigbluebutton/recording/status/{{ item }}"
@@ -214,7 +214,7 @@
   register: recording_status_stat
 
 - name: remove shared status directories for recording pre-processing
-  when: nfs_bbb|bool and nfs_active_meetings|bool and item.stat.isdir
+  when: nfs_bbb|bool and item.stat.isdir
   run_once: true
   file:
     path: "/var/bigbluebutton/recording/status/{{ item.item }}"
@@ -223,7 +223,7 @@
   loop: "{{ recording_status_stat.results }}"
 
 - name: symlink local status directories for recording pre-processing
-  when: nfs_bbb|bool and nfs_active_meetings|bool and item.stat.isdir
+  when: nfs_bbb|bool and item.stat.isdir
   run_once: true
   file:
     path: "/var/bigbluebutton/recording/status/{{ item.item }}"
