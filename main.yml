@@ -135,7 +135,6 @@
     bbb_greenlight_enable: no
     bbb_api_demos_enable: no
   roles:
-    - nginx
     - n0emis.bigbluebutton
     - kwoodson.yedit
     - record-offloader

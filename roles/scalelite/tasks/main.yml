@@ -139,33 +139,33 @@
 #  become_user: scalelite
   when: scalelite_database_tablecount.stdout|int <= 1
 
-- name: Ensure existence and permissions of directories
-  file:
-    path: /mnt/scalelite-recordings/var/bigbluebutton/{{ item }}
-    state: directory
-    mode: '0775'
-  with_items:
-    - "spool"
-    - "recording/scalelite"
-    - "published"
-    - "unpublished"
+# - name: Ensure existence and permissions of directories
+#   file:
+#     path: /mnt/scalelite-recordings/var/bigbluebutton/{{ item }}
+#     state: directory
+#     mode: '0775'
+#   with_items:
+#     - "spool"
+#     - "recording/scalelite"
+#     - "published"
+#     - "unpublished"
 
-- name: Ensure scalelite is owner of /var/bigbluebutton/spool
-  file:
-    path: /mnt/scalelite-recordings/var/bigbluebutton/spool
-    owner: 1000
-    group: 2000
+# - name: Ensure scalelite is owner of /var/bigbluebutton/spool
+#   file:
+#     path: /mnt/scalelite-recordings/var/bigbluebutton/spool
+#     owner: 1000
+#     group: 2000
 
-- name: Ensure scalelite is owner of /var/bigbluebutton/*
-  file:
-    path: /mnt/scalelite-recordings/var/bigbluebutton/{{ item }}
- #   recurse: yes
-    owner: 1000
-    group: 1000
-  with_items:
-    - "recording/scalelite"
-    - "published"
-    - "unpublished"
+# - name: Ensure scalelite is owner of /var/bigbluebutton/*
+#   file:
+#     path: /mnt/scalelite-recordings/var/bigbluebutton/{{ item }}
+#  #   recurse: yes
+#     owner: 1000
+#     group: 1000
+#   with_items:
+#     - "recording/scalelite"
+#     - "published"
+#     - "unpublished"
 
 - name: Ensure scalelite-api is started
   systemd:

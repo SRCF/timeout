@@ -19,13 +19,24 @@
     enabled: no
     masked: yes
     state: stopped
+  
+- name: copy post publish script
+  copy:
+    src: scalelite_post_publish.rb
+    dest: /usr/local/bigbluebutton/core/scripts/post_publish/scalelite_post_publish.rb
 
-- name: Ensure group "scalelite-spool" exists
-  group:
-    name: scalelite-spool
-    state: present
-    gid: 2000
+- name: copy scalelite yml
+  copy:
+    src: scalelite.yml
+    dest: /usr/local/bigbluebutton/core/scripts/scalelite.yml
 
-- name: Ensure user "bigbluebutton" in group "scalelite-spool"
-  groups: scalelite-spool
-  append: yes
+
+# - name: Ensure group "scalelite-spool" exists
+#   group:
+#     name: scalelite-spool
+#     state: present
+#     gid: 2000
+
+# - name: Ensure user "bigbluebutton" in group "scalelite-spool"
+#   groups: scalelite-spool
+#   append: yes
