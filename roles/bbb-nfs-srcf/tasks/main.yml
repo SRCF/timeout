@@ -132,7 +132,8 @@
     group: freeswitch
     mode: "0775"
 
-- name: make NFS BBB recording repository
+- name: make shared NFS BBB recording repository
+  run_once: true
   file:
     path: "/mnt/tmp/bigbluebutton"
     state: directory
@@ -140,7 +141,8 @@
     group: bigbluebutton
     mode: "0755"
 
-- name: make NFS Scalelite recording repository
+- name: make shared NFS Scalelite recording repository
+  run_once: true
   file:
     path: "/mnt/tmp/scalelite-recordings/var/bigbluebutton/{{ item }}"
     state: directory
