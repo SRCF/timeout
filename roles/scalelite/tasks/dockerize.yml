@@ -1,40 +1,40 @@
 ---
 
-- name: Ensure that correct locale is installed
-  apt:
-    name: language-pack-en
+# - name: Ensure that correct locale is installed
+#   apt:
+#     name: language-pack-en
 
-- name: Ensure that correct locale is used
-  command: update-locale LANG=en_US.UTF-8
+# - name: Ensure that correct locale is used
+#   command: update-locale LANG=en_US.UTF-8
 
-- name: Ensure that required dependencies are installed
-  apt:
-    update_cache: yes
-    cache_valid_time: 3600
-    name:
-      - software-properties-common
-      - curl
-      - net-tools
+# - name: Ensure that required dependencies are installed
+#   apt:
+#     update_cache: yes
+#     cache_valid_time: 3600
+#     name:
+#       - software-properties-common
+#       - curl
+#       - net-tools
 
-- name: Ensure that BBB apt-key is present
-  apt_key:
-    url: https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
-    state: present
+# - name: Ensure that BBB apt-key is present
+#   apt_key:
+#     url: https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
+#     state: present
 
-- name: Add repository for BBB to sources
-  apt_repository:
-    repo: deb http://ubuntu.bigbluebutton.org/xenial-220/ bigbluebutton-xenial main
-    filename: bigbluebutton
-    state: present
+# - name: Add repository for BBB to source
+#   apt_repository:
+#     repo: deb http://ubuntu.bigbluebutton.org/xenial-220/ bigbluebutton-xenial main
+#     filename: bigbluebutton
+#     state: present
 
-- name: Update apt
-  apt:
-    upgrade: yes
+# - name: Update apt
+#   apt:
+#     upgrade: yes
 
-- name: Install required bbb files
-  command: apt-get download bbb-playback-notes bbb-playback-podcast bbb-playback-presentation bbb-playback-screenshare
+# - name: Download required bbb files
+#   command: apt-get download bbb-playback-notes bbb-playback-podcast bbb-playback-presentation bbb-playback-screenshare
 
-- name: Ensure that packages are installed
-  command: dpkg -i --force-depends *.deb
+# - name: Ensure that packages are installed
+#   command: dpkg -i --force-depends *.deb
 
 
