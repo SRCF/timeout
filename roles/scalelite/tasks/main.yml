@@ -152,6 +152,8 @@
 #     - "published"
 #     - "unpublished"
 
+- import_tasks: dockerize.yml
+
 - name: Ensure scalelite-api is started
   systemd:
     name: scalelite-api
