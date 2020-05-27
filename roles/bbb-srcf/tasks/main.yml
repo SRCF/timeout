@@ -21,7 +21,7 @@
     line: "autoStartRecording=false"
   notify: restart bigbluebutton
 
-- name: ensure users are not allowed to start recording
+- name: ensure users are allowed to start recording
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
     regexp: "^allowStartStopRecording"
@@ -142,7 +142,7 @@
 
 - name: Ensure recording processing is disabled
   lineinfile:
-    dest: /usr/lib/systemd/system
+    dest: /usr/lib/systemd/system/bbb-record-core.target
     regexp: "^Wants"
     line: "Wants=bbb-rap-archive-worker.service bbb-rap-sanity-worker.service"
     state: present
