@@ -13,6 +13,13 @@
       - mp4
   notify: restart bigbluebutton
 
+- name: patch RAP publish worker to close its files before trying to delete them
+  lineinfile:
+    path: /usr/local/bigbluebutton/core/scripts/publish/presentation.rb
+    regexp: '^(.*)Nokogiri::XML\(File.open\((.*)$'
+    backrefs: yes
+    line: '\1Nokogiri::XML(File.read(\2'
+
 - name: Ensure that nginx is disabled
   systemd:
     name: nginx
