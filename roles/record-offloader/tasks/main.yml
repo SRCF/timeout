@@ -40,14 +40,14 @@
 
 - name: Ensure that recording archiving is disabled
   systemd:
-    name: bbb-rap-process-worker.service
+    name: bbb-rap-archive-worker.service
     enabled: no
     masked: yes
     state: stopped
 
 - name: Ensure that recording sanity-checking is disabled
   systemd:
-    name: bbb-rap-publish-worker.service
+    name: bbb-rap-sanity-worker.service
     enabled: no
     masked: yes
     state: stopped
