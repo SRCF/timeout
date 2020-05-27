@@ -14,11 +14,14 @@
   notify: restart bigbluebutton
 
 - name: patch RAP publish worker to close its files before trying to delete them
-  lineinfile:
-    path: /usr/local/bigbluebutton/core/scripts/publish/presentation.rb
-    regexp: '^(.*)Nokogiri::XML\(File.open\((.*)$'
-    backrefs: yes
-    line: '\1Nokogiri::XML(File.read(\2'
+  replace:
+    path: "{{ item }}"
+    regexp: '^(.*(Nokogiri::XML|Hash\.from_xml))\(File.open\((.*)$'
+    replace: '\1(File.read(\3'
+  with_items:
+    - /usr/local/bigbluebutton/core/scripts/rap-publish-worker.rb
+    - /usr/local/bigbluebutton/core/scripts/publish/presentation.rb
+    - /usr/local/bigbluebutton/core/lib/recordandplayback.rb
 
 - name: Ensure that nginx is disabled
   systemd:
