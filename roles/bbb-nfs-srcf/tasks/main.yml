@@ -1,0 +1,199 @@
+---
+- name: "clean up local bigbluebutton user (failure is good)"
+  user:
+    name: bigbluebutton
+    state: absent
+    force: yes
+    remove: no
+  # Will fail if this is the NIS user
+  ignore_errors: yes
+  register: userdel_bigbluebutton
+
+- name: "clean up local kurento user (failure is good)"
+  user:
+    name: kurento
+    state: absent
+    force: yes
+    remove: no
+  # Will fail if this is the NIS user
+  ignore_errors: yes
+  register: userdel_kurento
+
+- name: "clean up local freeswitch user (failure is good)"
+  user:
+    name: freeswitch
+    state: absent
+    force: yes
+    remove: no
+  # Will fail if this is the NIS user
+  ignore_errors: yes
+  register: userdel_freeswitch
+
+- name: "fix bigbluebutton permissions"
+  when: userdel_bigbluebutton.changed
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: bigbluebutton
+    group: bigbluebutton
+    recurse: yes
+  with_items:
+    - "/usr/local/bigbluebutton"
+    - "/var/bigbluebutton"
+    - "/var/log/bigbluebutton"
+    - "/var/log/bbb-fsesl-akka"
+    - "/var/log/bbb-apps-akka"
+    - "/var/log/bbb-transcode-akka"
+    - "/var/log/bbb-webrtc-sfu"
+
+- name: "fix freeswitch permissions"
+  when: userdel_freeswitch.changed
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: freeswitch
+    group: freeswitch
+    recurse: yes
+  with_items:
+    - "/var/freeswitch"
+    - "/opt/freeswitch"
+
+- name: "fix freeswitch database permissions"
+  when: userdel_freeswitch.changed
+  file:
+    path: "/dev/shm/core.db"
+    owner: freeswitch
+    group: freeswitch
+
+- name: "fix kurento permissions"
+  when: userdel_kurento.changed
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: kurento
+    group: kurento
+    recurse: yes
+  with_items:
+    - "/var/log/kurento-media-server"
+    - "/var/lib/kurento"
+
+- name: "restart bigbluebutton services after changing user IDs"
+  when: userdel_bigbluebutton.changed
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - bbb-apps-akka
+    - bbb-fsesl-akka
+    - bbb-transcode-akka
+    - bbb-web
+
+- name: "restart freeswitch after changing user IDs"
+  when: userdel_freeswitch.changed
+  service:
+    name: freeswitch
+    state: restarted
+
+- name: "restart kurento-media-server after changing user IDs"
+  when: userdel_kurento.changed
+  service:
+    name: kurento-media-server
+    state: restarted
+
+- name: mount NFS temporarily
+  mount:
+    src: "{{ nfs_server }}"
+    path: "/mnt/tmp"
+    fstype: nfs4
+    opts: "soft,intr,nodev,nosuid,noexec"
+    state: mounted
+
+- name: make NFS per-host scratch dir
+  when: nfs_active_meetings|bool
+  file:
+    path: "/mnt/tmp/active-meetings/{{ inventory_hostname_short }}"
+    state: directory
+
+- name: make NFS Kurento scratch dir
+  when: nfs_active_meetings|bool
+  file:
+    path: "/mnt/tmp/active-meetings/{{ inventory_hostname_short }}/kurento"
+    state: directory
+    owner: kurento
+    group: kurento
+    mode: "0775"
+
+- name: make NFS FreeSWITCH scratch dir
+  when: nfs_active_meetings|bool
+  file:
+    path: "/mnt/tmp/active-meetings/{{ inventory_hostname_short }}/freeswitch/meetings"
+    state: directory
+    owner: freeswitch
+    group: freeswitch
+    mode: "0775"
+
+- name: make NFS BBB recording repository
+  file:
+    path: "/mnt/tmp/bigbluebutton"
+    state: directory
+    owner: bigbluebutton
+    group: bigbluebutton
+    mode: "0755"
+
+- name: make NFS Scalelite recording repository
+  file:
+    path: "/mnt/tmp/scalelite-recordings/var/bigbluebutton/{{ item }}"
+    state: directory
+    owner: scalelite
+    group: scalelite
+    mode: "0775"
+  with_items:
+    - "spool"
+    - "recording/scalelite"
+    - "published"
+    - "unpublished"
+
+- name: unmount NFS temporarily
+  mount:
+    path: "/mnt/tmp"
+    state: absent
+
+- name: mount NFS for Kurento
+  when: nfs_active_meetings|bool
+  mount:
+    src: "{{ nfs_server }}/active-meetings/{{ inventory_hostname_short }}/kurento"
+    path: "/var/lib/kurento"
+    backup: yes
+    fstype: nfs4
+    opts: "soft,intr,nodev,nosuid,noexec"
+    state: mounted
+
+- name: mount NFS for FreeSWITCH
+  when: nfs_active_meetings|bool
+  mount:
+    src: "{{ nfs_server }}/active-meetings/{{ inventory_hostname_short }}/freeswitch"
+    path: "/var/freeswitch"
+    backup: yes
+    fstype: nfs4
+    opts: "soft,intr,nodev,nosuid,noexec"
+    state: mounted
+
+- name: mount NFS for BBB
+  when: nfs_bbb|bool
+  mount:
+    src: "{{ nfs_server }}/bigbluebutton"
+    path: "/var/bigbluebutton"
+    backup: yes
+    fstype: nfs4
+    opts: "soft,intr,nodev,nosuid,noexec"
+    state: mounted
+
+- name: mount NFS for Scalelite recordings
+  when: nfs_scalelite|bool
+  mount:
+    src: "{{ nfs_server }}/scalelite-recordings"
+    path: "/mnt/scalelite-recordings"
+    backup: yes
+    fstype: nfs4
+    opts: "soft,intr,nodev,nosuid,noexec"
+    state: mounted

@@ -4,21 +4,6 @@
 
 - import_tasks: nginx-config.yml
 
-- name: Ensure group "scalelite" exists
-  group:
-    name: scalelite
-    state: present
-    gid: 1000
-
-- name: Ensure user scalelite exists
-  user:
-    name: scalelite
-    shell: /bin/bash
-    password: '!'
-    update_password: on_create
-    groups: scalelite
-    state: present
-
 - name: Checkout scalelite repository
   git:
     repo: https://github.com/blindsidenetworks/scalelite.git

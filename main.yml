@@ -38,7 +38,10 @@
     bbb_coturn_secret: "{{ turn_secret }}"
     bbb_greenlight_enable: no
     bbb_api_demos_enable: no
+    nfs_bbb: yes
+    nfs_active_meetings: yes
   roles:
+    - bbb-nfs-srcf
     - nginx
     - n0emis.bigbluebutton
     - kwoodson.yedit
@@ -105,7 +108,9 @@
       - name: grafana
         owner: grafana
         state: present
+    nfs_scalelite: yes
   roles:
+    - bbb-nfs-srcf
     - nginx
     - nginx-tls
     - geerlingguy.redis
@@ -134,7 +139,10 @@
     bbb_turn_enable: no
     bbb_greenlight_enable: no
     bbb_api_demos_enable: no
+    nfs_bbb: yes
+    nfs_scalelite: yes
   roles:
+    - bbb-nfs-srcf
     - nginx
     - n0emis.bigbluebutton
     - kwoodson.yedit
