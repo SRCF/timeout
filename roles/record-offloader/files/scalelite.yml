@@ -1,5 +1,5 @@
 # Directory for temporary storage of working files
-work_dir: /mnt/var/bigbluebutton/recording/scalelite
+work_dir: /var/bigbluebutton/recording/scalelite
 # Directory to place recording files for scalelite to import
 # If you are using a shared filesystem, this should be the local mountpoint on the BigBlueButton server.
 spool_dir: /mnt/scalelite-recordings/var/bigbluebutton/spool
