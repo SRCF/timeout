@@ -142,6 +142,7 @@
     nfs_bbb: yes
     nfs_scalelite: yes
   roles:
+    - nginx
     - bbb-nfs-srcf
     - n0emis.bigbluebutton
     - kwoodson.yedit
