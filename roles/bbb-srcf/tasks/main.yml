@@ -140,10 +140,24 @@
     masked: no
     state: started
 
-- name: Ensure recording processing is disabled
+- name: Ensure recording processing is present
   lineinfile:
     dest: /usr/lib/systemd/system/bbb-record-core.target
     regexp: "^Wants"
-    line: "Wants=bbb-rap-archive-worker.service bbb-rap-sanity-worker.service"
+    line: "Wants=bbb-rap-archive-worker.service bbb-rap-sanity-worker.service bbb-rap-process-worker.service bbb-rap-publish-worker.service bbb-rap-events-worker.service"
     state: present
   notify: reload systemd
+
+- name: Ensure that recording processing is disabled
+  systemd:
+    name: bbb-rap-process-worker.service
+    enabled: no
+    masked: yes
+    state: stopped
+
+- name: Ensure that recording publishing is disabled
+  systemd:
+    name: bbb-rap-publish-worker.service
+    enabled: no
+    masked: yes
+    state: stopped
