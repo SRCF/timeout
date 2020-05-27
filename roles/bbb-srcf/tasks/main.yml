@@ -133,9 +133,17 @@
     user: root
     job: "systemctl restart coturn.service"
 
-- name: Ensure that recording processing is disabled
+- name: Ensure that recording archiving is enabled
   systemd:
     name: bbb-record-core.timer
-    enabled: no
-    masked: yes
-    state: stopped
+    enabled: yes
+    masked: no
+    state: started
+
+- name: Ensure recording processing is disabled
+  lineinfile:
+    dest: /usr/lib/systemd/system
+    regexp: "^Wants"
+    line: "Wants=bbb-rap-archive-worker.service bbb-rap-sanity-worker.service"
+    state: present
+  notify: reload systemd

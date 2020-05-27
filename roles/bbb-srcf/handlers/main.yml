@@ -7,3 +7,7 @@
 - name: restart bigbluebutton
   command: bbb-conf --restart
   become: yes
+
+- name: reload systemd
+  become: yes
+  command: systemctl daemon-reload
