@@ -3,7 +3,6 @@
 - name: Ensure that correct locale is installed
   apt:
     name: language-pack-en
-    update_cache: yes
 
 - name: Ensure that correct locale is used
   command: update-locale LANG=en_US.UTF-8
@@ -17,18 +16,25 @@
       - curl
       - net-tools
 
-- name: Download .asc
-  command: curl -sL https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc | apt-key add -
+- name: Ensure that BBB apt-key is present
+  apt_key:
+    url: https://ubuntu.bigbluebutton.org/repo/bigbluebutton.asc
+    state: present
 
-- name: Add repository list
-  command: "echo \"deb http://ubuntu.bigbluebutton.org/xenial-220/ bigbluebutton-xenial main\" >/etc/apt/sources.list.d/bigbluebutton.list"
+- name: Add repository for BBB to sources
+  apt_repository:
+    repo: deb http://ubuntu.bigbluebutton.org/xenial-220/ bigbluebutton-xenial main
+    filename: bigbluebutton
+    state: present
 
 - name: Update apt
   apt:
     upgrade: yes
 
 - name: Install required bbb files
-  command: apt-get download bbb-playback-notes bbb-playback-podcast bbb-playback-presentation bbb-playback-screenshare \
-    \&& dpkg -i --force-depends *.deb
+  command: apt-get download bbb-playback-notes bbb-playback-podcast bbb-playback-presentation bbb-playback-screenshare
+
+- name: Ensure that packages are installed
+  command: dpkg -i --force-depends *.deb
 
 
