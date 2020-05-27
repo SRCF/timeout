@@ -19,3 +19,13 @@
     enabled: no
     masked: yes
     state: stopped
+
+- name: Ensure group "scalelite-spool" exists
+  group:
+    name: scalelite-spool
+    state: present
+    gid: 2000
+
+- name: Ensure user "bigbluebutton" in group "scalelite-spool"
+  groups: scalelite-spool
+  append: yes

@@ -1,0 +1,22 @@
+[Unit]
+Description=Scalelite Recording Importer
+After=network-online.target
+Wants=network-online.target
+Before=scalelite.target
+PartOf=scalelite.target
+After=scalelite-api.service
+After=remote-fs.target
+
+[Service]
+Type=simple
+Environment=RECORDING_IMPORT_POLL=true
+Environment=RECORDING_IMPORT_POLL_INTERVAL=60
+EnvironmentFile=/var/www/scalelite/.env
+WorkingDirectory=/var/www/scalelite
+Restart=always
+RestartSec=60
+ExecStart=/usr/local/bin/bundle exec rake recordings:watch
+User=scalelite
+
+[Install]
+WantedBy=scalelite.target

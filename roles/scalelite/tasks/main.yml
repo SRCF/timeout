@@ -8,6 +8,7 @@
   group:
     name: scalelite
     state: present
+    gid: 1000
 
 - name: Ensure user scalelite exists
   user:
@@ -103,6 +104,11 @@
     src: scalelite-poller.service
     dest: /etc/systemd/system/scalelite-poller.service
 
+- name: Ensure systemd unit for scalelite recorder
+  template:
+    src: scalelite-recording-importer.service
+    dest: /etc/systemd/system/scalelite-recording-importer.service
+
 - name: Ensure systemd target for scalelite
   template:
     src: scalelite.target
@@ -116,6 +122,7 @@
   with_items:
     - scalelite-api
     - scalelite-poller
+    - scalelite-recording-importer
 
 - name: Count scalelite database tables
   shell:
@@ -132,6 +139,34 @@
 #  become_user: scalelite
   when: scalelite_database_tablecount.stdout|int <= 1
 
+- name: Ensure existence and permissions of directories
+  file:
+    path: /mnt/scalelite-recordings/var/bigbluebutton/{{ item }}
+    state: directory
+    mode: '0775'
+  with_items:
+    - "spool"
+    - "recording/scalelite"
+    - "published"
+    - "unpublished"
+
+- name: Ensure scalelite is owner of /var/bigbluebutton/spool
+  file:
+    path: /mnt/scalelite-recordings/var/bigbluebutton/spool
+    owner: 1000
+    group: 2000
+
+- name: Ensure scalelite is owner of /var/bigbluebutton/*
+  file:
+    path: /mnt/scalelite-recordings/var/bigbluebutton/{{ item }}
+ #   recurse: yes
+    owner: 1000
+    group: 1000
+  with_items:
+    - "recording/scalelite"
+    - "published"
+    - "unpublished"
+
 - name: Ensure scalelite-api is started
   systemd:
     name: scalelite-api
@@ -140,4 +175,9 @@
 - name: Ensure scalelite-poller is started
   systemd:
     name: scalelite-poller
+    state: started
+
+- name: Ensure scalelite-recording-importer is started
+  systemd:
+    name: scalelite-recording-importer
     state: started
