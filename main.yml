@@ -108,7 +108,7 @@
       - name: grafana
         owner: grafana
         state: present
-    nfs_scalelite: yes
+    nfs_scalelite_read: yes
   roles:
     - bbb-nfs-srcf
     - nginx
@@ -142,7 +142,7 @@
 # this secret is required but isn't used by n0emis.bigbluebutton
     bbb_coturn_secret: 36987a75a90e768786cd9805ed33bbca
     nfs_bbb: yes
-    nfs_scalelite: yes
+    nfs_scalelite_write: yes
   roles:
     - nginx
     - bbb-nfs-srcf

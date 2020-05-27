@@ -1,4 +1,5 @@
 ---
 nfs_active_meetings: no
 nfs_bbb: no
-nfs_scalelite: no
+nfs_scalelite_read: no
+nfs_scalelite_write: no

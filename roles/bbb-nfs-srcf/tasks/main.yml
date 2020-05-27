@@ -232,8 +232,8 @@
     backup: yes
   loop: "{{ recording_status_stat.results }}"
 
-- name: mount NFS for Scalelite recordings
-  when: nfs_scalelite|bool
+- name: mount NFS for writing Scalelite recordings
+  when: nfs_scalelite_write|bool
   mount:
     src: "{{ nfs_server }}/scalelite-recordings"
     path: "/mnt/scalelite-recordings"
@@ -241,3 +241,14 @@
     fstype: nfs4
     opts: "soft,intr,nodev,nosuid,noexec"
     state: mounted
+
+- name: mount NFS for reading Scalelite recordings
+  when: nfs_scalelite_read|bool
+  mount:
+    src: "{{ nfs_server }}/scalelite-recordings/var/bigbluebutton"
+    path: "/var/bigbluebutton"
+    backup: yes
+    fstype: nfs4
+    opts: "soft,intr,nodev,nosuid,noexec"
+    state: mounted
+
