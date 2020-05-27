@@ -30,6 +30,14 @@
     src: scalelite.yml
     dest: /usr/local/bigbluebutton/core/scripts/scalelite.yml
 
+- name: Ensure recording archiving is disabled
+  lineinfile:
+    dest: /usr/lib/systemd/system/bbb-record-core.target
+    regexp: "^Wants"
+    line: "Wants=bbb-rap-process-worker.service bbb-rap-publish-worker.service bbb-rap-events-worker.service"
+    state: present
+  notify: reload systemd
+
 
 # - name: Ensure group "scalelite-spool" exists
 #   group:
