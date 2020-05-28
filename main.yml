@@ -59,7 +59,7 @@
         secret: "{{ turn_secret }}"
         tls: false
       - server: "{{ bbb_additional_turn_server }}"
-        port: "{{ bbb_coturn_port_tls }}"
+        port: 443
         secret: "{{ turn_secret }}"
         tls: true
     bbb_nginx_dh: no
