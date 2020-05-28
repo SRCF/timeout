@@ -15,7 +15,7 @@ Useful resource: the repo with privacy stuff
 
 Installation instructions below taken right from stadtulm:
 
-### Prepare
+### Pre-run
 
 ```
 git submodule update --init
@@ -25,13 +25,19 @@ ansible-galaxy install -r requirements.yml
 Note: `cloudalchemy.node-exporter` requires the gnu variant of `tar` on macOS. (`brew install gnu-tar`)  
 Note: `cloudalchemy.prometheus` requires the `jmespath` python module on your (deployer) machine
 
-
-You need to create the file `vault_password` and put the ansible vault password in there.
+You need to create the file `vault_password` (if you know, you know)
 
 ### Run
 ```
-ansible-playbook main.yml
+ansible-playbook -u <your user> -t <the tag> main.yml
 ```
+Use the relevant tag:
+* offloader for changes to latency
+* greenlight for changes the greenlight
+* loadbalancer for changes to scalelite
+* register-bbbs to register a new BBB instance (make sure to flush the redis cache before)
+* bbb-install for a new BBB machine
+* base must be run before any of these
 
 ## HowTo
 ### Add new machine
