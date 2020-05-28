@@ -1,8 +1,8 @@
-# Timeout by the SRCF
+# Timeout Videoconferencing by the SRCF
 
-https://github.com/stadtulm/greenlight/commits/ulmlernt
+[Documentation](https://docs.srcf.net/timeout)
 
-TODO: ADD FAVICON /var/www/bigbluebutton-default/favicon.ico
+[Videoconferencing](https://timeout.srcf.net)
 
 Stack used:
 * Ansible for configuration management on servers
@@ -11,9 +11,7 @@ Stack used:
 * Scalelite for load balancing
 * Prometheus and Grafana (possibly) for monitoring
 
-Useful resource: the repo with privacy stuff
-
-Installation instructions below taken right from stadtulm:
+## Installation
 
 ### Pre-run
 
@@ -31,25 +29,21 @@ You need to create the file `vault_password` (if you know, you know)
 ```
 ansible-playbook -u <your user> -t <the tag> main.yml
 ```
-Use the relevant tag:
+Use the relevant tags:
 * offloader for changes to latency
 * greenlight for changes the greenlight
 * loadbalancer for changes to scalelite
 * register-bbbs to register a new BBB instance (make sure to flush the redis cache before)
 * bbb-install for a new BBB machine
 * base must be run before any of these
+* base-monitoring for adding node exporter
 
-## HowTo
-### Add new machine
-* Update DNS zonefile in `files/coredns/zones/`
- * add A and AAAA records
- * update serial (`yyyymmddvv` with `vv` being the version increment. E.g., 2020040101)
-* Update DNS by `ansible-playbook main.yml --tags dns`
+### Adding a new machine
+* Ensure that DNS is properly configured
 * Enter Hostname twice in `inventory`, below `[all]` and below the other role the machine should have, eg. `[bbb]`
-* Confirm that you can ssh into the machine by its newly aquired dns name (this also adds the host key to your `~/.ssh/known_hosts`)
-* run `ansible-playbook main.yml -l your.fresh.hostname.example` (you may need `--user root` if you don't have an user yet, the base role creates one for you)
-* ...?
+* Make sure your user can SSH into said machine
+* run `ansible-playbook main.yml -t install-bbb`
 * register your new bbb instance:
-  * at the monitoring by running `ansible-playbook main.yml --tags monitoring`
-  * at the loadbalancer by running `ansible-playbook main.yml --tags config`
+  * at the monitoring by running `ansible-playbook main.yml --tags base-monitoring`
+  * at the loadbalancer by running `ansible-playbook main.yml --tags register-bbbs`
 * enable it manually in the loadbalancer
