@@ -35,6 +35,14 @@
     line: "defaultWelcomeMessage=Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href=\"event:http://www.bigbluebutton.org/html5\"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button. Use a headset to avoid causing background noise for others."
   notify: restart bigbluebutton
 
+- name: enforce meeting duration limit
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: "^defaultMeetingDuration"
+    line: "defaultMeetingDuration=480"
+  notify: restart bigbluebutton
+
+
 - name: ensure our own help URL is used
   yedit:
     src: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
