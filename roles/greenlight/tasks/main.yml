@@ -19,8 +19,7 @@
   git:
     repo: https://github.com/srcf/greenlight.git
     dest: /var/www/greenlight
-    version: srcf
-    #version: 5c54d2ee44b0a2ed23361bbf4fc94e16f6982720
+    version: temp
   notify: restart greenlight
 
 - name: Ensure greenlight is owner of /var/www/greenlight
