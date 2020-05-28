@@ -272,6 +272,7 @@
   become: yes
   tags:
     - scalelite-config
+    - monitoring
   vars_files:
     - vars.yml
   vars:
