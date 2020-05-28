@@ -148,6 +148,8 @@
     masked: no
     state: started
 
+
+# needs to be removed in a future version
 - name: Ensure recording processing is present
   lineinfile:
     dest: /usr/lib/systemd/system/bbb-record-core.target

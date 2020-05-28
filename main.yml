@@ -9,11 +9,21 @@
   roles:
     - base
 
+- name: TURN Server
+  hosts: turn
+  become: yes
+  tags:
+    - turn
+  vars_files:
+    - vars.yml    
+  roles:
+    - turn-standalone
+
 - name: Monitored host
   hosts: all
   become: yes
   tags:
-    - monitoring-base
+    - base-monitoring
   vars:
     _node_exporter_binary_install_dir: "/opt/node_exporter"
     _node_exporter_system_group: "prometheus"
@@ -34,12 +44,49 @@
     bbb_letsencrypt_email: "{{ letsencrypt_email }}"
     bbb_coturn_enable: yes
     bbb_turn_enable: yes
+    bbb_coturn_port_tls: 5349
+    bbb_turn_servers:
+      - server: "{{ bbb_hostname }}"
+        port: "{{ bbb_coturn_port }}"
+        secret: "{{ bbb_coturn_secret }}"
+        tls: false
+      - server: "{{ bbb_hostname }}"
+        port: "{{ bbb_coturn_port_tls }}"
+        secret: "{{ bbb_coturn_secret }}"
+        tls: true
+      - server: "{{ bbb_additional_turn_server }}"
+        port: "{{ bbb_coturn_port }}"
+        secret: "{{ turn_secret }}"
+        tls: false
+      - server: "{{ bbb_additional_turn_server }}"
+        port: "{{ bbb_coturn_port_tls }}"
+        secret: "{{ turn_secret }}"
+        tls: true
     bbb_nginx_dh: no
-    bbb_coturn_secret: "{{ turn_secret }}"
     bbb_greenlight_enable: no
     bbb_api_demos_enable: no
     nfs_bbb: yes
     nfs_active_meetings: yes
+  pre_tasks:
+    - name: find out what the current turn config is
+      slurp:
+        src: /etc/turnserver.conf
+      register: current_turn_conf
+      ignore_errors: yes
+      when: not bbb_coturn_secret is defined
+    - name: register current turn secret
+      set_fact:
+        bbb_coturn_secret: "{{ current_turn_conf.content | b64decode | regex_findall('static-auth-secret=(.+)') | first }}"
+      when: not bbb_coturn_secret is defined and not current_turn_conf.failed
+    - name: Generate turn server secret
+      command: openssl rand -hex 16
+      register: openssl_rand_16_turn
+      check_mode: no
+      when: not bbb_coturn_secret is defined
+    - name: Register turn server secret
+      set_fact:
+        bbb_coturn_secret: "{{ openssl_rand_16_turn.stdout }}"
+      when: not bbb_coturn_secret is defined and openssl_rand_16_turn is defined
   roles:
     - bbb-nfs-srcf
     - nginx
@@ -52,7 +99,7 @@
   become: yes
   tags:
     - install-bbb
-    - config
+    - scalelite-config
   roles:
     - bbb-collect
 
@@ -60,7 +107,7 @@
   hosts: bbb
   become: yes
   tags:
-    - export-bbb
+    - bbb-monitoring
   roles:
     - bbb-exporter
 
@@ -224,7 +271,7 @@
   hosts: loadbalancer
   become: yes
   tags:
-    - monitoring-config
+    - scalelite-config
   vars_files:
     - vars.yml
   vars:
