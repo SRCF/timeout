@@ -19,7 +19,7 @@
 
 - name: Enable logrotate for coturn
   template:
-    src: logrotate/coturn
+    src: coturn
     dest: /etc/logrotate.d/coturn
 
 - name: Enable coturn
