@@ -2,7 +2,7 @@
 ping.timeout.srcf.net
 tuit.timeout.srcf.net
 gateway.timeout.srcf.net
-latency.srcf.net
+latency.timeout.srcf.net
 relay.timeout.srcf.net
 socket.timeout.srcf.net
 
@@ -24,5 +24,5 @@ relay.timeout.srcf.net turn_hostname="relay.timeout.srcf.net"
 socket.timeout.srcf.net turn_hostname="socket.timeout.srcf.net"
 
 [offloader]
-latency.srcf.net
+latency.timeout.srcf.net
 
