@@ -1,6 +1,6 @@
 # Timeout Videoconferencing by the SRCF
 
-[Documentation](https:/docs.srcf.net/timeout)
+[Documentation](https://docs.srcf.net/timeout)
 
 [Videoconferencing](https://timeout.srcf.net)
 
