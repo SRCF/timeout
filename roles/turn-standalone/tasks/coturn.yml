@@ -17,11 +17,6 @@
     append: yes
     state: present
 
-- name: Enable logrotate for coturn
-  template:
-    src: coturn
-    dest: /etc/logrotate.d/coturn
-
 - name: Enable coturn
   systemd:
     daemon_reload: yes
