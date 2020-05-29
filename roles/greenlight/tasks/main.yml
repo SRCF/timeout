@@ -13,6 +13,7 @@
     password: "!"
     update_password: on_create
     groups: greenlight
+    system: yes
     state: present
 
 - name: Checkout greenlight repository
@@ -45,7 +46,7 @@
 # bundler: deployment mode by cli argument is deprecated, so we're going to run this:
 - name: Ensure bundle in is deployment mode
   become: yes
-#  become_user: greenlight
+  become_user: greenlight
   command:
     cmd: bundle config set deployment 'true'
     chdir: /var/www/greenlight
@@ -54,7 +55,7 @@
 
 - name: Ensure gems for greenlight are installed
   become: yes
-#  become_user: greenlight
+  become_user: greenlight
   bundler:
     state: present
     exclude_groups:
@@ -88,7 +89,7 @@
 
 - name: Ensure environment file for greenlight
   become: yes
-#  become_user: greenlight
+  become_user: greenlight
   template:
     src: env.j2
     dest: /var/www/greenlight/.env
