@@ -20,7 +20,7 @@
   git:
     repo: https://github.com/srcf/greenlight.git
     dest: /var/www/greenlight
-    version: temp
+    version: srcf
   notify: restart greenlight
 
 - name: Ensure greenlight is owner of /var/www/greenlight
@@ -94,12 +94,19 @@
     src: env.j2
     dest: /var/www/greenlight/.env
   notify: restart greenlight
-#  
 
 - name: Ensure systemd unit for greenlight
   template:
     src: greenlight.service
     dest: /etc/systemd/system/greenlight.service
+
+- name: Ensure database has been migrated
+  shell:
+    chdir: /var/www/greenlight
+    executable: /bin/bash
+    cmd: "set -o allexport; source .env; set +o allexport; bundle exec ./bin/rake db:migrate"
+  become: yes
+  become_user: greenlight
 
 - name: Enable greenlight units
   systemd:

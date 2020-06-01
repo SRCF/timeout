@@ -26,7 +26,7 @@ Welcome to Timeout, the SRCF's solution to a free, easy and convenient video con
 
 ## Notes on privacy and data
 
-We are compliant with the Data Protection Act, notably in regards to:
+We value your privacy, notably in regards to:
 
 * The storage of cookies - we only store what is essential for the operation of Greenlight (the front-end) and BigBlueButton
 * Recording - rooms are only recorded if the host allows them to be
