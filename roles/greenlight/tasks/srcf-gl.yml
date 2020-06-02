@@ -2,6 +2,6 @@
 
 - name: Copy our terms
   copy:
-    src: "/var/www/greenlight/terms.md"
+    remote_src: "/var/www/greenlight/terms.md"
     dest: "/var/www/greenlight/config/terms.md"
   notify: restart greenlight
