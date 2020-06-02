@@ -101,6 +101,13 @@
     value: conference/conf-unmuted-ulmlernt.wav
   notify: restart bigbluebutton
 
+- name: ensure that alone sound is absent
+  xml:
+    path: /opt/freeswitch/etc/freeswitch/autoload_configs/conference.conf.xml
+    xpath: '/configuration/profiles/profile[@name="cdquality"]/param[@name="alone-sound"]'
+    state: absent
+  notify: restart bigbluebutton
+
 - name: adapt coturn ports in ufw
   copy:
     content: |
