@@ -10,35 +10,35 @@
 - name: ensure default recording is enabled
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: "^disableRecordingDefault"
+    regexp: "^disableRecordingDefault="
     line: "disableRecordingDefault=false"
   notify: restart bigbluebutton
 
 - name: ensure recording auto start is disabled
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: "^autoStartRecording"
+    regexp: "^autoStartRecording="
     line: "autoStartRecording=false"
   notify: restart bigbluebutton
 
 - name: ensure users are allowed to start recording
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: "^allowStartStopRecording"
+    regexp: "^allowStartStopRecording="
     line: "allowStartStopRecording=true"
   notify: restart bigbluebutton
 
 - name: customize welcome meeting header
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: "^defaultWelcomeMessage"
+    regexp: "^defaultWelcomeMessage="
     line: "defaultWelcomeMessage=Welcome to <b>%%CONFNAME%%</b>!<br><br>For help on using BigBlueButton see these (short) <a href=\"event:http://www.bigbluebutton.org/html5\"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the phone button. Use a headset to avoid causing background noise for others."
   notify: restart bigbluebutton
 
 - name: enforce meeting duration limit
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: "^defaultMeetingDuration"
+    regexp: "^defaultMeetingDuration="
     line: "defaultMeetingDuration=480"
   notify: restart bigbluebutton
 
@@ -53,7 +53,7 @@
 - name: customize welcome meeting footer
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
-    regexp: "^defaultWelcomeMessageFooter"
+    regexp: "^defaultWelcomeMessageFooter="
     line: "defaultWelcomeMessageFooter=Please report all queries and issues to support@srcf.net."
   notify: restart bigbluebutton
 
@@ -160,7 +160,7 @@
 - name: Ensure recording processing is present
   lineinfile:
     dest: /usr/lib/systemd/system/bbb-record-core.target
-    regexp: "^Wants"
+    regexp: "^Wants="
     line: "Wants=bbb-rap-archive-worker.service bbb-rap-sanity-worker.service bbb-rap-process-worker.service bbb-rap-publish-worker.service bbb-rap-events-worker.service"
     state: present
   notify: reload systemd
