@@ -3,12 +3,9 @@ roles:
   - name: cloudalchemy.node-exporter
     version: 0.19.0
   - name: kwoodson.yedit
-  # currently not using the custom fork
   - name: n0emis.bigbluebutton
   - name: geerlingguy.nodejs
     version: 5.1.1
-  - name: geerlingguy.docker
-    version: 2.7.0
   - name: geerlingguy.redis
     version: 1.6.0
   - name: geerlingguy.postgresql
@@ -19,9 +16,3 @@ roles:
     version: 2.15.0
   - name: cloudalchemy.grafana
     version: 0.17.0
-  - name: geerlingguy.elasticsearch
-    version: 4.2.0
-  - name: geerlingguy.java
-    version: 1.10.0
-  - name: geerlingguy.mailhog
-    version: 2.2.0
