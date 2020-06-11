@@ -18,7 +18,7 @@
 
 - name: Checkout greenlight repository
   git:
-    repo: https://github.com/srcf/greenlight.git
+    repo: https://github.com/SRCF/greenlight.git
     dest: /var/www/greenlight
     version: srcf
   notify: restart greenlight
