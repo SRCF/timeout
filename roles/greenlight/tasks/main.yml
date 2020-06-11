@@ -100,6 +100,7 @@
     src: greenlight.service
     dest: /etc/systemd/system/greenlight.service
 
+# this fails if postgresql has not been restarted at least once!
 - name: Ensure database has been migrated
   shell:
     chdir: /var/www/greenlight
@@ -118,6 +119,3 @@
   systemd:
     name: greenlight
     state: started
-
-- name: Apply our custom configs
-  import_tasks: srcf-gl.yml
