@@ -30,6 +30,7 @@
   apt:
     name:
       - byobu
+      - mosh
       - zsh
       - curl
       - wget
