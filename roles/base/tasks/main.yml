@@ -83,4 +83,15 @@
     state: absent
   notify: restart sshd
 
+- name: Ensure malc's PPA is added to the system
+  apt_repository:
+    repo: ppa:malcscott/entropy
+
+- name: Ensure kernel entropy pool seeding daemon is installed
+  apt:
+    name:
+      - entropyclient
+    state: present
+    update_cache: yes
+
 - import_tasks: firewall.yml
