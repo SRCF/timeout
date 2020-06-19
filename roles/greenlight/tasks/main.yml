@@ -12,7 +12,7 @@
     shell: /bin/bash
     password: "!"
     update_password: on_create
-    groups: greenlight
+    group: greenlight
     system: yes
     state: present
 
