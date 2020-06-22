@@ -92,6 +92,5 @@
     name:
       - entropyclient
     state: present
-    update_cache: yes
 
 - import_tasks: firewall.yml
