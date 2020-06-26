@@ -54,7 +54,7 @@
   yedit:
     src: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
     key: public.app.mirrorOwnWebcam
-    value: true
+    value: "true"
   notify: restart bigbluebutton
 
 - name: customize welcome meeting footer
