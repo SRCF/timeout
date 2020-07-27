@@ -7,8 +7,12 @@ relay.timeout.srcf.net
 socket.timeout.srcf.net
 
 [bbb]
-ping.timeout.srcf.net bbb_additional_turn_server="relay.timeout.srcf.net"
-tuit.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net"
+ping.timeout.srcf.net bbb_additional_turn_server="relay.timeout.srcf.net" recording_server=true
+tuit.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" recording_server=true
+
+
+[test]
+bbb-test.srcf.net
 
 [loadbalancer]
 gateway.timeout.srcf.net
