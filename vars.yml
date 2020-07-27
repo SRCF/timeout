@@ -6,6 +6,7 @@ bbb_meteor:
     app:
       helpLink: "https://docs.srcf.net/timeout"
       mirrorOwnWebcam: true
+      clientTitle: "SRCF Timeout VC"
     kurento:
       cameraProfiles:
       - id: low
