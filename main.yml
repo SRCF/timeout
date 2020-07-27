@@ -84,7 +84,7 @@
         bbb_coturn_secret: "{{ openssl_rand_16_turn.stdout }}"
       when: not bbb_coturn_secret is defined and openssl_rand_16_turn is defined
   roles:
-    - bbb-nfs-srcf
+    - { role: bbb-nfs-srcf, when: recording_server}
     - nginx
     - n0emis.bigbluebutton
     - kwoodson.yedit
