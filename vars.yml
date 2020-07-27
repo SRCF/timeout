@@ -1,6 +1,30 @@
 ---
 letsencrypt_email: support@srcf.net
 
+bbb_meteor:
+  public:
+    app:
+      helpLink: "https://docs.srcf.net/timeout"
+      mirrorOwnWebcam: true
+    kurento:
+      cameraProfiles:
+      - id: low
+        name: Low quality
+        default: false
+        bitrate: 50
+      - id: medium
+        name: Medium quality
+        default: true
+        bitrate: 100
+      - id: high
+        name: High quality
+        default: false
+        bitrate: 200
+      - id: hd
+        name: High definition
+        default: false
+        bitrate: 400
+
 mail_admin:
   {
     server: "ppsw.cam.ac.uk",

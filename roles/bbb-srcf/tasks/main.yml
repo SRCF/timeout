@@ -42,21 +42,6 @@
     line: "defaultMeetingDuration=480"
   notify: restart bigbluebutton
 
-
-- name: ensure our own help URL is used
-  yedit:
-    src: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
-    key: public.app.helpLink
-    value: "https://docs.srcf.net/timeout"
-  notify: restart bigbluebutton
-
-- name: ensure that webcams are mirrored
-  yedit:
-    src: /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml
-    key: public.app.mirrorOwnWebcam
-    value: "true"
-  notify: restart bigbluebutton
-
 - name: customize welcome meeting footer
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
