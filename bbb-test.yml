@@ -1,6 +1,6 @@
 ---
 - name: Basic Setup
-  hosts: all
+  hosts: test
   become: yes
   tags:
     - base
@@ -9,16 +9,8 @@
   roles:
     - base
 
-- name: Collect BBB secrets
-  hosts: bbb
-  become: yes
-  tags:
-    - greenlight
-  roles:
-    - bbb-collect
-
 - name: BigBlueButton
-  hosts: bbb
+  hosts: test
   become: yes
   tags:
     - install-bbb
