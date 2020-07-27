@@ -13,6 +13,8 @@
       - mp4
   notify: restart bigbluebutton
 
+# We've successfully upstreamed this change, we should remove it soon
+
 - name: patch RAP publish worker to close its files before trying to delete them
   replace:
     path: "{{ item }}"
