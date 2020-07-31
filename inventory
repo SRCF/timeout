@@ -1,6 +1,9 @@
 [all]
 ping.timeout.srcf.net
 tuit.timeout.srcf.net
+watchdog.timeout.srcf.net
+sleep.timeout.srcf.net
+boot.timeout.srcf.net
 gateway.timeout.srcf.net
 latency.timeout.srcf.net
 relay.timeout.srcf.net
@@ -8,7 +11,10 @@ socket.timeout.srcf.net
 
 [bbb]
 ping.timeout.srcf.net bbb_additional_turn_server="relay.timeout.srcf.net" recording_server=true
-tuit.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" recording_server=true
+tuit.timeout.srcf.net bbb_additional_turn_server="relay.timeout.srcf.net" recording_server=true
+watchdog.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" 
+sleep.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" 
+boot.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" 
 
 
 [test]

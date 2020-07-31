@@ -10,7 +10,7 @@
     src: /usr/local/bigbluebutton/core/scripts/presentation.yml
     key: video_formats
     value:
-      - mp4
+      "- mp4"
   notify: restart bigbluebutton
 
 # We've successfully upstreamed this change, we should remove it soon
