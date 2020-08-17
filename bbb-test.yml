@@ -60,6 +60,15 @@
     - kwoodson.yedit
     - bbb-srcf
 
+- name: Collect BBB secrets
+  hosts: bbb
+  become: yes
+  tags:
+    - install-bbb
+    - greenlight
+  roles:
+    - bbb-collect
+
 - name: Frontend - Greenlight
   hosts: bbb
   become: yes
