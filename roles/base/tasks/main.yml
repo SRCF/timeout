@@ -46,7 +46,7 @@
   pip:
     name:
       - pyaml
-      - psycopg2
+      - psycopg2-binary
 
 - name: Ensure clean motd
   file:
