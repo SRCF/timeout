@@ -335,7 +335,7 @@
       disable_login_form: true
       anonymous:
         enabled: true
-        org_name: ulmlernt
+        org_name: srcf
         org_role: Viewer
   roles:
     - cloudalchemy.prometheus

@@ -12,9 +12,9 @@ socket.timeout.srcf.net
 [bbb]
 ping.timeout.srcf.net bbb_additional_turn_server="relay.timeout.srcf.net" recording_server=true
 tuit.timeout.srcf.net bbb_additional_turn_server="relay.timeout.srcf.net" recording_server=true
-watchdog.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" 
-sleep.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" 
-boot.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" 
+watchdog.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" recording_server=false 
+sleep.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" recording_server=false
+boot.timeout.srcf.net bbb_additional_turn_server="socket.timeout.srcf.net" recording_server=false
 
 
 [test]
