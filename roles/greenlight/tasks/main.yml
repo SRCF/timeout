@@ -30,6 +30,15 @@
     owner: greenlight
     group: greenlight
 
+- name: Fetch latest tags
+  command: 
+    chdir: /var/www/greenlight
+    cmd: git fetch upstream --tags
+  register: debug_tags
+
+- debug:
+    var: debug_tags["stderr_lines"]
+
 - name: Ensure Bundler 2 is installed
   gem:
     name: bundler
