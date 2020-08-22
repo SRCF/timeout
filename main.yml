@@ -260,8 +260,9 @@
       become: yes
     - geerlingguy.ruby
     - geerlingguy.nodejs
-    - docker
     - greenlight
+
+  
 
 - name: Monitoring
   hosts: loadbalancer
@@ -275,9 +276,9 @@
     nginx_domain_name: mon.timeout.srcf.net
     prometheus_targets:
       node:
-        - targets: "{{ groups['all'] | map('extract', hostvars, ['ansible_fqdn']) | map('regex_replace', '$', ':9100') | list }}"
+        - targets: "{{ groups['all'] | map('extract', hostvars, ['inventory_hostname']) | map('regex_replace', '$', ':9100') | list }}"
       bbb:
-        - targets: "{{ groups['bbb'] | map('extract', hostvars, ['ansible_fqdn']) | map('regex_replace', '$', ':9688') | list }}"
+        - targets: "{{ groups['bbb'] | map('extract', hostvars, ['inventory_hostname']) | map('regex_replace', '$', ':9688') | list }}"
     prometheus_scrape_configs:
       - job_name: "prometheus"
         metrics_path: "/metrics"
@@ -332,7 +333,7 @@
       editors_can_admin: true
       auto_assign_org_role: Editor
     grafana_auth:
-      disable_login_form: true
+      disable_login_form: false
       anonymous:
         enabled: true
         org_name: srcf
