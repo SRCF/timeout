@@ -13,6 +13,15 @@
     regexp: "^disableRecordingDefault="
     line: "disableRecordingDefault=false"
   notify: restart bigbluebutton
+  when: recording_server|bool
+
+- name: ensure default recording is enabled
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: "^disableRecordingDefault="
+    line: "disableRecordingDefault=true"
+  notify: restart bigbluebutton
+  when: not recording_server|bool
 
 - name: ensure recording auto start is disabled
   lineinfile:
@@ -27,6 +36,15 @@
     regexp: "^allowStartStopRecording="
     line: "allowStartStopRecording=true"
   notify: restart bigbluebutton
+  when: recording_server|bool
+
+- name: ensure users are allowed to start recording
+  lineinfile:
+    path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+    regexp: "^allowStartStopRecording="
+    line: "allowStartStopRecording=false"
+  notify: restart bigbluebutton
+  when: not recording_server|bool
 
 - name: customize welcome meeting header
   lineinfile:
