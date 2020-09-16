@@ -176,20 +176,19 @@
   tags:
     - offloader
   vars:
-    bbb_nginx_dh: no
-    bbb_letsencrypt_enable: no
-    bbb_coturn_enable: no
-    bbb_turn_enable: no
-    bbb_greenlight_enable: no
-    bbb_api_demos_enable: no
-# this secret is required but isn't used by n0emis.bigbluebutton
-    bbb_coturn_secret: 36987a75a90e768786cd9805ed33bbca
     nfs_bbb: yes
     nfs_scalelite_write: yes
+    bbb_recording_deps:
+      - bbb-record-core
+      - bbb-mkclean
+      - bbb-playback-notes
+      - bbb-playback-podcast
+      - bbb-playback-presentation
+      - bbb-playback-screenshare 
+      - bbb-config
   roles:
-    - nginx
+    - base
     - bbb-nfs-srcf
-    - n0emis.bigbluebutton
     - kwoodson.yedit
     - record-offloader
 

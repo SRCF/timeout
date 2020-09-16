@@ -1,0 +1,32 @@
+---
+- name: add BigBlueButton apt key
+  apt_key:
+    url: "{{ bbb_apt_mirror }}/repo/bigbluebutton.asc"
+    id: '{{ bbb_apt_key }}'
+    state: present
+
+- name: add multiverse apt repositories
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
+    - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} multiverse"
+    - "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
+    - "deb-src http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }}-updates multiverse"
+
+- name: add Xenial dependency apt repositories
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  when: ansible_distribution_release == 'xenial'
+  with_items:
+    - ppa:bigbluebutton/support
+    - ppa:rmescandon/yq
+
+- name: add dependency apt repositories
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - "deb {{ bbb_apt_mirror }}/xenial-22/ bigbluebutton-xenial main"

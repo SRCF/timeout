@@ -1,9 +1,20 @@
 ---
-# https://github.com/bigbluebutton/bigbluebutton/pull/8394
-
 # to add to prometheus: https://github.com/povilasv/systemd_exporter
 
 # to have multiple workers: https://github.com/bigbluebutton/bigbluebutton/issues/8770
+
+- name: Install required packages
+  apt:
+    name: "{{ bbb_required_packages }}"
+    update_cache: true
+    state: "{{ bbb_state }}"
+
+- import_tasks: repositories.yml
+
+- name: install bbb recording packages
+  apt:
+    name: "{{ bbb_recording_deps }}"
+    state: present
 
 - name: ensure we're using mp4 for recordings
   yedit:
@@ -24,13 +35,6 @@
     - /usr/local/bigbluebutton/core/scripts/rap-publish-worker.rb
     - /usr/local/bigbluebutton/core/scripts/publish/presentation.rb
     - /usr/local/bigbluebutton/core/lib/recordandplayback.rb
-
-- name: Ensure that nginx is disabled
-  systemd:
-    name: nginx
-    enabled: yes
-    masked: no
-    state: started
   
 - name: copy post publish script
   copy:
@@ -41,14 +45,6 @@
   copy:
     src: scalelite.yml
     dest: /usr/local/bigbluebutton/core/scripts/scalelite.yml
-
-- name: Ensure all workers are present
-  lineinfile:
-    dest: /usr/lib/systemd/system/bbb-record-core.target
-    regexp: "^Wants"
-    line: "Wants=bbb-rap-archive-worker.service bbb-rap-sanity-worker.service bbb-rap-process-worker.service bbb-rap-publish-worker.service bbb-rap-events-worker.service"
-    state: present
-  notify: reload systemd
 
 - name: Ensure that recording archiving is disabled
   systemd:
@@ -71,13 +67,12 @@
     masked: yes
     state: stopped
 
+- name: Ensure group "scalelite-spool" exists
+  group:
+    name: scalelite-spool
+    state: present
+    gid: 2000
 
-# - name: Ensure group "scalelite-spool" exists
-#   group:
-#     name: scalelite-spool
-#     state: present
-#     gid: 2000
-
-# - name: Ensure user "bigbluebutton" in group "scalelite-spool"
-#   groups: scalelite-spool
-#   append: yes
+- name: Ensure user "bigbluebutton" in group "scalelite-spool"
+  groups: scalelite-spool
+  append: yes
