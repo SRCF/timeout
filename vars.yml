@@ -43,19 +43,6 @@ bbb_meteor:
         hidden: true
       cameraQualityThresholds:
         enabled: true
-        thresholds:
-        - threshold: 8
-          profile: low-u8
-        - threshold: 12
-          profile: low-u12
-        - threshold: 15
-          profile: low-u15
-        - threshold: 20
-          profile: low-u20
-        - threshold: 25
-          profile: low-u25
-        - threshold: 30
-          profile: low-u30
 
 mail_admin:
   {
