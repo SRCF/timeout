@@ -36,6 +36,8 @@ bbb_meteor:
         name: High definition
         default: false
         bitrate: 400
+      cameraQualityThresholds:
+        enabled: true
 
 mail_admin:
   {
