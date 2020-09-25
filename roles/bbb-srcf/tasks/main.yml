@@ -7,6 +7,13 @@
       - mp4
   notify: restart bigbluebutton
 
+- name: copy apply-config
+  copy:
+    src: apply-config.sh
+    dest: /etc/bigbluebutton/bbb-conf/apply-config.sh
+    mode: 0755
+  notify: restart bigbluebutton
+
 - name: ensure default recording is enabled
   lineinfile:
     path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties

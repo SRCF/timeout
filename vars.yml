@@ -20,14 +20,18 @@ bbb_meteor:
       clientTitle: "SRCF Timeout VC"
     kurento:
       cameraProfiles:
+      - id: low-u8
+        bitrate: 90
+      - id: low-u12
+        bitrate: 80
       - id: low
         name: Low quality
         default: false
-        bitrate: 50
+        bitrate: 100
       - id: medium
         name: Medium quality
         default: true
-        bitrate: 100
+        bitrate: 150
       - id: high
         name: High quality
         default: false
@@ -36,6 +40,9 @@ bbb_meteor:
         name: High definition
         default: false
         bitrate: 400
+        hidden: true
+      cameraQualityThresholds:
+        enabled: true
 
 mail_admin:
   {
