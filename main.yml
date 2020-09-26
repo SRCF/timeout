@@ -278,6 +278,10 @@
         - targets: "{{ groups['all'] | map('extract', hostvars, ['inventory_hostname']) | map('regex_replace', '$', ':9100') | list }}"
       bbb:
         - targets: "{{ groups['bbb'] | map('extract', hostvars, ['inventory_hostname']) | map('regex_replace', '$', ':9688') | list }}"
+      coturn:
+        - targets: 
+          - "{{ groups['turn'] | map('extract', hostvars, ['inventory_hostname']) | map('regex_replace', '$', ':9461') | list }}"
+          - "{{ groups['bbb'] | map('extract', hostvars, ['inventory_hostname']) | map('regex_replace', '$', ':9688') | list }}"
     prometheus_scrape_configs:
       - job_name: "prometheus"
         metrics_path: "/metrics"
