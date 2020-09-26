@@ -195,3 +195,7 @@
     enabled: no
     masked: yes
     state: stopped
+
+- name: set bbb hostname for cases where a new config is required
+  command: "bbb-conf --setip {{ bbb_hostname }}"
+  become: true
