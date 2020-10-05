@@ -1,8 +1,19 @@
 ---
-
-## enable scalelite in systemctl
-
 - import_tasks: nginx-config.yml
+
+- name: Ensure group "scalelite" exists
+  group:
+    name: scalelite
+    state: present
+
+- name: Ensure user scalelite exists
+  user:
+    name: scalelite
+    shell: /bin/bash
+    password: '!'
+    update_password: on_create
+    groups: scalelite
+    state: present
 
 - name: Ensure that BBB apt key is present
   apt_key:
@@ -38,12 +49,14 @@
       - bbb-playback-podcast
       - bbb-playback-presentation
       - bbb-playback-screenshare
+  when: recording
 
 - name: Checkout scalelite repository
   git:
     repo: https://github.com/blindsidenetworks/scalelite.git
     dest: /var/www/scalelite
     version: master
+  notify: restart scalelite
 
 - name: Ensure scalelite is owner of /var/www/scalelite
   file:
@@ -72,7 +85,7 @@
     chdir: /var/www/scalelite
     creates: /var/www/scalelite/.bundle/config
   become: yes
-#  become_user: scalelite
+  become_user: scalelite
 
 - name: Ensure gems for scalelite are installed
   bundler:
@@ -82,7 +95,7 @@
       - test
     chdir: /var/www/scalelite
   become: yes
-#  become_user: scalelite
+  become_user: scalelite
 
 - name: Generate scalelite secret key base
   command: openssl rand -hex 64
@@ -112,7 +125,7 @@
     dest: /var/www/scalelite/.env
   become: yes
   notify: restart scalelite
-#  become_user: scalelite
+  become_user: scalelite
 
 - name: Ensure systemd unit for scalelite api
   template:
@@ -128,6 +141,7 @@
   template:
     src: scalelite-recording-importer.service
     dest: /etc/systemd/system/scalelite-recording-importer.service
+  when: recording
 
 - name: Ensure systemd target for scalelite
   template:
@@ -142,7 +156,12 @@
   with_items:
     - scalelite-api
     - scalelite-poller
-    - scalelite-recording-importer
+#    - "{ src: scalelite-recording-importer, when: "{{recording}}" }"
+
+- name: restart postgres
+  service:
+    name: postgresql
+    state: restarted
 
 - name: Count scalelite database tables
   shell:
@@ -156,7 +175,7 @@
     executable: /bin/bash
     cmd: "set -o allexport; source .env; set +o allexport; bundle exec rails db:schema:load"
   become: yes
-#  become_user: scalelite
+  become_user: scalelite
   when: scalelite_database_tablecount.stdout|int <= 1
 
 # - name: Ensure existence and permissions of directories
@@ -201,3 +220,4 @@
   systemd:
     name: scalelite-recording-importer
     state: started
+  when: recording

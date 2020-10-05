@@ -1,0 +1,70 @@
+---
+- name: Basic Setup
+  hosts: loadbalancer
+  become: yes
+  tags:
+    - base
+  vars_files:
+    - vars.yml
+  roles:
+    - base
+
+- name: Loadbalancer
+  hosts: loadbalancer
+  become: yes
+  vars:
+    recording: no
+    letsencrypt_email: support@srcf.net
+    nginx_domain_name: "scalelite01.timeout.srcf.net"
+    redis_port: 6379
+    redis_bind_interface: 127.0.0.1
+    ruby_install_from_source: yes
+    ruby_version: 2.6.6
+    ruby_download_url: https://cache.ruby-lang.org/pub/ruby/2.6/ruby-2.6.6.tar.gz
+    ruby_install_bundler: yes
+    postgresql_hba_entries:
+      - { type: local, database: all, user: postgres, auth_method: peer }
+      - { type: local, database: all, user: all, auth_method: peer }
+      - {
+          type: host,
+          database: all,
+          user: all,
+          address: "127.0.0.1/32",
+          auth_method: trust,
+        }
+      - {
+          type: host,
+          database: all,
+          user: all,
+          address: "::1/128",
+          auth_method: trust,
+        }
+    postgresql_users:
+      - name: scalelite
+        state: present
+      - name: grafana
+        state: present
+    postgresql_databases:
+      - name: scalelite
+        owner: scalelite
+        state: present
+      - name: grafana
+        owner: grafana
+        state: present
+    nfs_scalelite_read: yes
+  roles:
+    - nginx
+    - nginx-tls
+    - geerlingguy.redis
+    - role: geerlingguy.postgresql
+      become: yes
+    - geerlingguy.ruby
+    - scalelite
+
+# - name: Register BBBs at Loadbalancer
+#   hosts: loadbalancer
+#   become: yes
+#   tags:
+#     - register-bbbs
+#   roles:
+#     - scalelite-config
